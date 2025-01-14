@@ -1,22 +1,18 @@
 package com.app.domain.member.entity;
 
 import com.app.domain.common.BaseEntity;
-import com.app.domain.member.constant.Role;
+import com.app.domain.member.constant.Gender;
 import com.app.domain.member.constant.MemberStatus;
+import com.app.domain.member.constant.Role;
 import com.app.global.jwt.dto.JwtTokenDto;
 import com.app.global.util.DateTimeUtils;
-import java.time.LocalDateTime;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -40,11 +36,15 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 20)
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private Gender gender;
+
     // 토스 회원가입시X, 필요데이터
     @Column(nullable = true, length = 200)
     private String profileImg;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = true, length = 200)
     private String budget;
 
     @Enumerated(EnumType.STRING)
@@ -62,7 +62,7 @@ public class Member extends BaseEntity {
 
     // 필요한 필드들만 빌더로 받아서 사용할 수 있게
     @Builder
-    public Member(String email, String password, String memberName, String phoneNumber,
+    public Member(String email, String password, String memberName, String phoneNumber, Gender gender,
         String profileImg, String budget, Role role, MemberStatus memberStatus) {
 
         this.email = email;
@@ -72,6 +72,7 @@ public class Member extends BaseEntity {
         this.profileImg = profileImg;
         this.budget = budget;
         this.role = role;
+        this.gender = gender;
         this.memberStatus = memberStatus;
     }
 

@@ -10,21 +10,32 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
-@RequiredArgsConstructor
+@Component
 public class TokenManager {
 
     // application.yml에서 가져올 것임
     private final String accessTokenExpirationTime;
     private final String refreshTokenExpirationTime;
-    private final String tokenSecret;
+    private final Key key;
 
+    public TokenManager(
+            @Value("${token.access-token-expiration-time}") String accessTokenExpirationTime,
+            @Value("${token.refresh-token-expiration-time}") String refreshTokenExpirationTime,
+            @Value("${token.secret}") String tokenSecret) {
+        this.accessTokenExpirationTime = accessTokenExpirationTime;
+        this.refreshTokenExpirationTime = refreshTokenExpirationTime;
+        this.key = Keys.hmacShaKeyFor(tokenSecret.getBytes(StandardCharsets.UTF_8));
+    }
     // 액세스 토큰에 멤버 아이디와 역할을 담아서 반환할 것이다.
     public JwtTokenDto createJwtTokenDto(Long memberId, Role role) {
         Date accessTokenExpireTime = createAccessTokenExpireTime();
@@ -34,6 +45,7 @@ public class TokenManager {
         String refreshToken = createRefreshToken(memberId, refreshTokenExpireTime);
 
         return JwtTokenDto.builder()
+            .memberId(String.valueOf(memberId))
             .grantType(GrantType.BEARER.getType())
             .accessToken(accessToken)
             .refreshToken(refreshToken)
@@ -59,7 +71,7 @@ public class TokenManager {
             .setExpiration(expirationTime)
             .claim("memberId", memberId) // 회원 아이디
             .claim("role", role)
-            .signWith(SignatureAlgorithm.HS512, tokenSecret.getBytes(StandardCharsets.UTF_8))
+            .signWith(key, SignatureAlgorithm.HS512) // 수정된 부분
             .setHeaderParam("type", "JWT")
             .compact();
         return accessToken;
@@ -71,7 +83,7 @@ public class TokenManager {
             .setIssuedAt(new Date()) // 현재시간으로 토큰발급시간 설정
             .setExpiration(expirationTime)
             .claim("memberId", memberId) // 회원 아이디, refresh token에는 많은 정보를 담지 않기 위해 role은 제외
-            .signWith(SignatureAlgorithm.HS512, tokenSecret.getBytes(StandardCharsets.UTF_8))
+            .signWith(key, SignatureAlgorithm.HS512) // 수정된 부분
             .setHeaderParam("type", "JWT")
             .compact();
         return refreshToken;
@@ -81,11 +93,12 @@ public class TokenManager {
     // -> access 토큰 refresh 토큰 둘 다 검증 가능
     public void validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(tokenSecret.getBytes(StandardCharsets.UTF_8))
-                .parseClaimsJws(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
         } catch (ExpiredJwtException e) {
             log.info("token 만료", e);
-            // todo 예외는 왜 또 따로 던져주는지 모르겠다 - 아마도 각각의 예외에 대한 에러코드와 메시지를 클라이언트에 보내주기 위해
             throw new AuthenticationException(ErrorCode.TOKEN_EXPIRED);
         } catch (Exception e) { // 위조/변조/발급하지 않은 토큰일때
             log.info("유효하지 않은 token", e);
@@ -97,8 +110,11 @@ public class TokenManager {
     public Claims getTokenClaims(String token) {
         Claims claims;
         try {
-            claims = Jwts.parser().setSigningKey(tokenSecret.getBytes(StandardCharsets.UTF_8))
-                .parseClaimsJws(token).getBody();
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (Exception e) {
             log.info("유효하지 않은 token", e);
             throw new AuthenticationException(ErrorCode.NOT_VALID_TOKEN);

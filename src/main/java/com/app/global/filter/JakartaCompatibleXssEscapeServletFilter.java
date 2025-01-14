@@ -1,41 +1,39 @@
 package com.app.global.filter;
 
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
+import com.app.global.adapter.FilterConfigAdapter;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 
+@Slf4j
 public class JakartaCompatibleXssEscapeServletFilter implements Filter {
 
-    private final javax.servlet.Filter delegate; // javax.servlet.Filter를 명시적으로 사용
+    private final javax.servlet.Filter delegate;
 
     public JakartaCompatibleXssEscapeServletFilter(javax.servlet.Filter delegate) {
         this.delegate = delegate;
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(jakarta.servlet.FilterConfig filterConfig) throws ServletException {
         try {
-            delegate.init(null); // 위임 필터 초기화
+            delegate.init(new FilterConfigAdapter(filterConfig));
         } catch (javax.servlet.ServletException e) {
-            throw new RuntimeException(e);
+            throw new jakarta.servlet.ServletException(e);
         }
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, jakarta.servlet.ServletException {
-        try {
-            delegate.doFilter(
-                    (javax.servlet.ServletRequest) request,
-                    (javax.servlet.ServletResponse) response,
-                    (javax.servlet.FilterChain) chain
-            );
-        } catch (javax.servlet.ServletException e) {
-            throw new jakarta.servlet.ServletException(e); // 예외 변환
+            throws IOException, ServletException {
+        if (request instanceof HttpServletRequest httpRequest) {
+//            log.info("XSS 필터 호출: {}", httpRequest.getRequestURI());
+            // HttpServletRequest로 처리
+            chain.doFilter(httpRequest, response);
+        } else {
+            throw new ServletException("Invalid request type");
         }
     }
 

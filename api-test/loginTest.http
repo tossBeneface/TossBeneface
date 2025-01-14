@@ -7,7 +7,9 @@ Content-Type: application/json
   "email": "test@example.com",
   "password": "password123",
   "memberName": "Test User",
-  "role": "USER"
+  "phoneNumber": "010-000-0000",
+  "role": "USER",
+  "gender": "FEMALE"
 }
 
 

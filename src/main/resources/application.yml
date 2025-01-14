@@ -4,16 +4,20 @@ server:
     context-path: /
 
 spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
   # todo 개발 데이터베이스 연결
   datasource:
-    url: jdbc:h2:mem:test
+    url: jdbc:h2:file:./data/testdb
     username: sa
     password:
     driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -43,7 +47,7 @@ feign:
         readTimeout: 5000
 
 token:
-  secret: ENC(NmaifQXjZydZpOzS+fc7vkM/XFurUaOEb+a2hUcgrUqCAzyp2RP9Zw==) # 임의의 문자열
+  secret: ENC(RwHsLoX0h6jH5/4TbISBOZWdMBxyIOAD1tjXyzazpoGErQg8hO1XNrAsNi3BLFQy4oDDCNZgOXEG5x1aKYS0Vw==) # 임의의 문자열, 단 Base64 88문자 이상이어야
   access-token-expiration-time: 900000 # 15분 1000(ms) x 60(s) x 15(m)
   refresh-token-expiration-time: 1209600000 # 2주 1000(ms) x 60 (s) x 60(m) x 24(h) x 14(d)
 

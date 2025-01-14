@@ -4,12 +4,9 @@ import com.app.global.jwt.dto.JwtTokenDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
 import java.util.Date;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 public class LoginDto {
 
@@ -38,6 +35,9 @@ public class LoginDto {
 
         @Schema(description = "휴대폰 번호", example = "010-0000-0000", required = true)
         private String phoneNumber;
+
+        @Schema(description = "성별", example = "male/female", required = true)
+        private String gender;
 
         @Schema(description = "잔액", example = "10000원", required = true)
         private String budget;
@@ -68,6 +68,7 @@ public class LoginDto {
 
         public static Response of(JwtTokenDto jwtTokenDto) {
             return Response.builder()
+                .memberId(jwtTokenDto.getMemberId())
                 .grantType(jwtTokenDto.getGrantType())
                 .accessToken(jwtTokenDto.getAccessToken())
                 .accessTokenExpireTime(jwtTokenDto.getAccessTokenExpireTime())

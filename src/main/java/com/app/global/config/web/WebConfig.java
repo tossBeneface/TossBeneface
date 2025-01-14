@@ -6,23 +6,24 @@ import com.app.global.interceptor.AuthenticationInterceptor;
 import com.app.global.resolver.memberInfo.MemberInfoArgumentResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.cbor.MappingJackson2CborHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class WebConfig implements WebMvcConfigurer {
 
     private final AuthenticationInterceptor authenticationInterceptor;
@@ -35,12 +36,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(authenticationInterceptor)
             .order(1) // 인증 인터셉터가 가장 먼저 동작하도록 설정
             .addPathPatterns("/api/**")
-            .excludePathPatterns("/api/join",
-                "/api/login",
-                "/h2-console",
-                "/api/access-token/issue",
-                "/api/logout",
-                "/api/health"); // 어떤 요청에 대해 동작할 것인지 정의 : health/feign-test는 여기 없는데 어떻게 되려나
+            .excludePathPatterns("/api/join", "/api/join/**",
+                "/api/login", "/api/login/**",
+                "/h2-console/**",
+                "/api/access-token/issue", "/api/access-token/issue/**",
+                "/api/health");
         registry.addInterceptor(adminAuthorizationInterceptor)
             .order(2)
             .addPathPatterns("/api/admin/**");

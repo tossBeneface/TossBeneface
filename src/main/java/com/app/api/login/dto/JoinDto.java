@@ -26,9 +26,16 @@ public class JoinDto {
         @Schema(description = "휴대폰 번호", example = "010-0000-0000", required = true)
         private String phoneNumber;
 
+        @Schema(description = "성별", example = "male/female", required = true)
+        private String gender;
+
         // 토스 회원가입시X, 필요데이터
         @Schema(description = "프로필 사진", example = "없을시 기본 이미지로 대체", required = false)
         private String profileImg;
+
+        @Schema(description = "사용자 분류", example = "user/owner/admin", required = true)
+        private String role;
+
 
     }
 
@@ -50,11 +57,17 @@ public class JoinDto {
         @Schema(description = "휴대폰 번호", example = "010-0000-0000", required = true)
         private String phoneNumber;
 
+        @Schema(description = "성별", example = "male/female", required = true)
+        private String gender;
+
+        @Schema(description = "잔액", example = "10000원", required = false)
+        private String budget;
+
         // TODO 서비스에서
         @Schema(description = "프로필 사진", example = "없을시 기본 이미지로 대체", required = false)
         private String profileImg;
 
-        @Schema(description = "일반 사용자/관리자 여부", example = "관리자", required = true)
+        @Schema(description = "사용자 분류", example = "user/owner/admin", required = true)
         private String role;
 
         @Schema(description = "grantType", example = "Bearer", required = true)
@@ -77,8 +90,12 @@ public class JoinDto {
 
         public static Response of(JwtTokenDto jwtTokenDto, JoinDto.Request request) {
             return Response.builder()
-                    .email(request.getEmail())
-                    .memberName(request.getMemberName())
+                .email(request.getEmail())
+                .memberName(request.getMemberName())
+                .phoneNumber(request.getPhoneNumber())
+                .gender(request.getGender())
+                .role(request.getRole())
+                .memberId(jwtTokenDto.getMemberId())
                 .grantType(jwtTokenDto.getGrantType())
                 .accessToken(jwtTokenDto.getAccessToken())
                 .accessTokenExpireTime(jwtTokenDto.getAccessTokenExpireTime())
