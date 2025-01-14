@@ -1,5 +1,6 @@
 package com.app.global.config.web;
 
+import com.app.global.filter.JakartaCompatibleXssEscapeServletFilter;
 import com.app.global.interceptor.AdminAuthorizationInterceptor;
 import com.app.global.interceptor.AuthenticationInterceptor;
 import com.app.global.resolver.memberInfo.MemberInfoArgumentResolver;
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +35,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(authenticationInterceptor)
             .order(1) // 인증 인터셉터가 가장 먼저 동작하도록 설정
             .addPathPatterns("/api/**")
-            .excludePathPatterns("/api/oauth/login",
+            .excludePathPatterns("/api/join",
+                "/api/login",
+                "/h2-console",
                 "/api/access-token/issue",
                 "/api/logout",
                 "/api/health"); // 어떤 요청에 대해 동작할 것인지 정의 : health/feign-test는 여기 없는데 어떻게 되려나
@@ -63,9 +67,9 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public FilterRegistrationBean<XssEscapeServletFilter> filterRegistrationBean() {
-        FilterRegistrationBean<XssEscapeServletFilter> filterRegistration = new FilterRegistrationBean<>();
-        filterRegistration.setFilter(new XssEscapeServletFilter());
+    public FilterRegistrationBean<JakartaCompatibleXssEscapeServletFilter> filterRegistrationBean() {
+        FilterRegistrationBean<JakartaCompatibleXssEscapeServletFilter> filterRegistration = new FilterRegistrationBean<>();
+        filterRegistration.setFilter(new JakartaCompatibleXssEscapeServletFilter(new XssEscapeServletFilter()));
         filterRegistration.setOrder(1);
         filterRegistration.addUrlPatterns("/*");
         return filterRegistration;

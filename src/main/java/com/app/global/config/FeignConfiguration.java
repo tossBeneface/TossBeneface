@@ -5,15 +5,17 @@ import feign.Logger;
 import feign.Logger.Level;
 import feign.Retryer;
 import feign.codec.ErrorDecoder;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@EnableFeignClients(basePackages = "com.app") //todo 패키지명 수정
-@Import(FeignClientsConfiguration.class)
+@EnableFeignClients(basePackages = "com.app.api")
+@ImportAutoConfiguration({FeignAutoConfiguration.class, HttpClientConfiguration.class})
 public class FeignConfiguration {
 
     // 로깅 레벨 설정

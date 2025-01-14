@@ -1,27 +1,32 @@
 package com.app.global.config.jpa;
 
-import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.Optional;
 
 public class AuditorAwareImpl implements AuditorAware<String> {
-
-    // 현재 요청에 대한 uri 정보를 여기서 가져온다
-    @Autowired
-    private HttpServletRequest httpServletRequest;
 
     // 이 메소드의 반환값으로 생성자나 수정자에 등록될 uri정보를 전해줘야 한다.
     @Override
     public Optional<String> getCurrentAuditor() {
-        String modifiedBy = httpServletRequest.getRequestURI();
+        // RequestContextHolder를 통해 HttpServletRequest가 있는지 확인
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        if (attributes instanceof ServletRequestAttributes) {
+            HttpServletRequest request = ((ServletRequestAttributes) attributes).getRequest();
+            String modifiedBy = request.getRequestURI();
 
-//        HttpServletRequest에서 찾으려고 하는 uri 정보가 빈 값이면 수정자를 Unknown으로 설정
-        if (!StringUtils.hasText(modifiedBy)) {
-            modifiedBy = "unknown";
+            // HttpServletRequest에서 찾으려고 하는 uri 정보가 빈 값이면 수정자를 Unknown으로 설정
+            if (!StringUtils.hasText(modifiedBy)) {
+                modifiedBy = "unknown";
+            }
+            return Optional.of(modifiedBy);
         }
-//        of(X)  는 X 가 null 이 아님이 확실할 때만 사용해야 하며, X 가 null 이면 NullPointerException이 발생 한다.
-        return Optional.of(modifiedBy);
+        // RequestAttributes가 없을 경우 "unknown" 반환
+        return Optional.of("unknown");
     }
 }

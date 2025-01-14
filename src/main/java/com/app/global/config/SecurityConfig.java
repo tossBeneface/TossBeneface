@@ -4,6 +4,7 @@ import com.app.global.jwt.service.TokenManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 public class SecurityConfig {
@@ -20,6 +21,11 @@ public class SecurityConfig {
     @Bean
     public TokenManager tokenManager() {
         return new TokenManager(accessTokenExpirationTime, refreshTokenExpirationTime, tokenSecret);
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
 }

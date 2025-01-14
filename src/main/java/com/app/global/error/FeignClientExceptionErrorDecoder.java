@@ -7,6 +7,8 @@ import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
+import java.util.Date;
+
 @Slf4j
 public class FeignClientExceptionErrorDecoder implements ErrorDecoder {
 
@@ -21,12 +23,12 @@ public class FeignClientExceptionErrorDecoder implements ErrorDecoder {
         // 500 에러일 때 재시도를 하도록 처리
         if (httpStatus.is5xxServerError()) {
             return new RetryableException(
-                response.status(),
-                exception.getMessage(),
-                response.request().httpMethod(),
-                exception,
-                null,
-                response.request()
+                    (int) response.status(),
+                    exception.getMessage(),
+                    response.request().httpMethod(),
+                    (Throwable) exception,
+                    (Date) null,
+                    response.request()
             );
         }
         return errorDecoder.decode(methodKey, response);

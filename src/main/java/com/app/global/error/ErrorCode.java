@@ -20,10 +20,10 @@ public enum ErrorCode {
     FORBIDDEN_ADMIN(HttpStatus.FORBIDDEN, "A-008", "관리자 Role이 아닙니다. 관리자만 접근 가능합니다."),
 
     // 회원
-    INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "M-001", "잘못된 회원 타입 입니다.(MemberType : KAKAO, ...)"),
-    ALREADY_REGISTERED_MEMBER(HttpStatus.BAD_REQUEST, "M-002", "이미 가입된 회원입니다."),
-    MEMBER_NOT_EXIST(HttpStatus.BAD_REQUEST, "M-003", "해당 회원은 존재하지 않습니다.")
-
+    ALREADY_REGISTERED_MEMBER(HttpStatus.BAD_REQUEST, "M-001", "이미 가입된 회원입니다."),
+    MEMBER_NOT_EXIST(HttpStatus.BAD_REQUEST, "M-002", "해당 회원은 존재하지 않습니다."),
+    INVALID_EMAIL(HttpStatus.BAD_REQUEST, "M-003", "이메일 주소가 잘못되었습니다."),
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "M-004", "비밀번호가 틀렸습니다."),
     ;
 
 

@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/** 설정 정보 암호화 및 복호화(DB비번, API키, 토큰 등)
+ *
+ */
 @Configuration
 public class JasyptConfig {
 
@@ -13,7 +16,6 @@ public class JasyptConfig {
 
     @Bean
     public PooledPBEStringEncryptor jasyptStringEncryptor() {
-        // 보통 멀티코어를 많이 쓰니까 Standard...Encryptor말고 이것을 사용
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         encryptor.setPoolSize(4);
         encryptor.setPassword(password);

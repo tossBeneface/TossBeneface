@@ -10,19 +10,44 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.GetMapping;
 
-public class OauthLoginDto {
+public class LoginDto {
 
     @Getter @Setter
     public static class Request {
-        @Schema(description = "소셜 로그인 회원 타입", example = "KAKAO", required = true)
-        private String memberType;
+        @Schema(description = "이메일", example = "a061283@aivle.kt.co.kr", required = true)
+        private String email;
+
+        @Schema(description = "비밀번호", example = "비밀번호 정책 설명", required = true)
+        private String password;
+
     }
 
     @Getter @Setter
     @Builder @NoArgsConstructor @AllArgsConstructor
     public static class Response {
+
+        @Schema(description = "MemberId", example = "1", required = true)
+        private String memberId;
+
+        @Schema(description = "이메일", example = "a061283@aivle.kt.co.kr", required = true)
+        private String email;
+
+        @Schema(description = "이름", example = "1", required = true)
+        private String memberName;
+
+        @Schema(description = "휴대폰 번호", example = "010-0000-0000", required = true)
+        private String phoneNumber;
+
+        @Schema(description = "잔액", example = "10000원", required = true)
+        private String budget;
+
+        // TODO 서비스에서
+        @Schema(description = "프로필 사진", example = "없을시 기본 이미지로 대체", required = false)
+        private String profileImg;
+
+        @Schema(description = "일반 사용자/관리자 여부", example = "관리자", required = true)
+        private String role;
 
         @Schema(description = "grantType", example = "Bearer", required = true)
         private String grantType;

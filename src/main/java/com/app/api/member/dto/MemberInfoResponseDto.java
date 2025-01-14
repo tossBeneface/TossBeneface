@@ -30,7 +30,7 @@ public class MemberInfoResponseDto {
             .memberId(member.getMemberId())
             .memberName(member.getMemberName())
             .email(member.getEmail())
-            .profile(member.getProfile())
+            .profile(member.getProfileImg())
             .role(member.getRole())
             .build();
     }

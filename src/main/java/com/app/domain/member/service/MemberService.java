@@ -9,6 +9,7 @@ import com.app.global.error.exception.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +21,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public Member registerMember(Member member) {
-        // 어차피 OauthLoginService에서 회원가입 시킬 때 기존 회원인 경우 토큰발급만 해주도록 분기처리 해놓았지만
-        // 신규 회원 가입 로직에 한번더 체크하도록 방어 로직을 넣어 놓는것
+        // 한번더 체크하도록 방어 로직
         validateDuplicateMember(member);
         return memberRepository.save(member);
     }

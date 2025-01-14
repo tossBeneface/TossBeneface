@@ -1,7 +1,7 @@
 package com.app.api.exceptionTest.dto;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
