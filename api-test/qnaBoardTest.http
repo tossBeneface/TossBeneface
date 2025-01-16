@@ -1,0 +1,59 @@
+
+### 파일 업로드 요청
+# curl -X POST http://localhost:8080/api/files/upload
+#-H "Authorization: Bearer YOUR_JWT_ACCESS_TOKEN"
+#-F "files=@/path/to/your/local/file1.png"
+#-F "files=@/path/to/your/local/file2.pdf"
+POST http://localhost:8080/api/files/upload
+Authorization: Bearer YOUR_JWT_ACCESS_TOKEN
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="file1.png"
+
+< \path\to\your\local\file1.png
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="file2.pdf"
+
+< \path\to\your\local\file2.pdf
+--WebAppBoundary--
+
+###
+
+
+
+###
+### 게시글 작성 요청
+# curl -X POST http://localhost:8080/api/qnaboards/create
+#-H "Authorization: Bearer YOUR_JWT_ACCESS_TOKEN"
+#-H "Content-Type: application/json"
+#-d '{
+#  "memberId": 1,
+#  "title": "boardTest 1",
+#  "content": "qna 게시판 게시글 내용",
+#  "attachmentUrls": [
+#    "https://ai0310bucket.s3.ap-southeast-2.amazonaws.com/file1.png",
+#    "https://ai0310bucket.s3.ap-southeast-2.amazonaws.com/file2.pdf"
+#  ]
+#}'
+
+
+POST http://localhost:8080/api/qnaboard/create
+Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzcwMTEzNDQsImV4cCI6MTczNzAxMjI0NCwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.t5Wh4r80S1GOH6M1h8tK6J75Es5XSNjzWgT7PK32pwnpy6WArVn3-RpBI8pis7BaiV2fAXoF0LEMyapPVvW83g
+Content-Type: application/json
+
+{
+  "memberId": 1,
+  "title": "boardTest 1",
+  "content": "qna 게시판 게시글 내용",
+  "attachmentUrls": [
+    "https://ai0310bucket.s3.ap-southeast-2.amazonaws.com/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7+2025-01-03+103457.png",
+    "https://ai0310bucket.s3.ap-southeast-2.amazonaws.com/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7+2025-01-03+103457.png"
+  ]
+}
+
+###
+GET http://localhost:8080/api/qnaboard/test
+Content-Type: application/json
+###
+

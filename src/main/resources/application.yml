@@ -38,6 +38,7 @@ logging:
   level:
     org.hibernate.type: trace
     com.app: debug # todo 패키지 수정
+    org.springframework.security: DEBUG
 
 feign:
   client:

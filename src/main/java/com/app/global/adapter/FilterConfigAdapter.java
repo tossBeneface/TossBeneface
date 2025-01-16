@@ -1,8 +1,9 @@
 package com.app.global.adapter;
-
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import java.util.Enumeration;
 
-public class FilterConfigAdapter implements javax.servlet.FilterConfig {
+public class FilterConfigAdapter implements FilterConfig {
 
     private final jakarta.servlet.FilterConfig jakartaFilterConfig;
 
@@ -16,7 +17,7 @@ public class FilterConfigAdapter implements javax.servlet.FilterConfig {
     }
 
     @Override
-    public javax.servlet.ServletContext getServletContext() {
+    public ServletContext getServletContext() {
         return new ServletContextAdapter(jakartaFilterConfig.getServletContext());
     }
 

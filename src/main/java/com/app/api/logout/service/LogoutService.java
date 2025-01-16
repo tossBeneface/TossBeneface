@@ -30,7 +30,7 @@ public class LogoutService {
         }
 
         Long memberId = Long.valueOf((Integer) tokenClaims.get("memberId"));
-        Member member = memberService.findMemberByMemberId(memberId);
+        Member member = memberService.findMemberById(memberId);
         member.expireRefreshToken(LocalDateTime.now());
 
     }

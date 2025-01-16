@@ -15,7 +15,7 @@ public class MemberInfoService {
 
     @Transactional(readOnly = true)
     public MemberInfoResponseDto getMemberInfo(Long memberId) {
-        Member member = memberService.findMemberByMemberId(memberId);
+        Member member = memberService.findMemberById(memberId);
         return MemberInfoResponseDto.of(member);
     }
 }

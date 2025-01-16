@@ -40,6 +40,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             throw new AuthenticationException(ErrorCode.NOT_ACCESS_TOKEN_TYPE);
         }
 
+        log.info("토큰 유효성 검사 완료");
         return true;
     }
 }

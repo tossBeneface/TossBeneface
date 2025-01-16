@@ -33,6 +33,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        log.info("WebConfig - Interceptor 등록됨");
         registry.addInterceptor(authenticationInterceptor)
             .order(1) // 인증 인터셉터가 가장 먼저 동작하도록 설정
             .addPathPatterns("/api/**")
@@ -40,7 +41,8 @@ public class WebConfig implements WebMvcConfigurer {
                 "/api/login", "/api/login/**",
                 "/h2-console/**",
                 "/api/access-token/issue", "/api/access-token/issue/**",
-                "/api/health");
+                "/api/health",
+                    "/api/qnaboard/test");
         registry.addInterceptor(adminAuthorizationInterceptor)
             .order(2)
             .addPathPatterns("/api/admin/**");

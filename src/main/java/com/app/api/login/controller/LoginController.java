@@ -39,12 +39,8 @@ public class LoginController {
     @Tag(name = "authentication")
     @Operation(summary = "로그인 API", description = "로그인 API")
     @PostMapping("/login")
-    public ResponseEntity<LoginDto.Response> login(@RequestBody LoginDto.Request loginRequestDto,
-                                                        HttpServletRequest httpServletRequest) {
+    public ResponseEntity<LoginDto.Response> login(@RequestBody LoginDto.Request loginRequestDto) {
 
-//        String authorizationHeader = httpServletRequest.getHeader("Authorization");
-//        AuthorizationHeaderUtils.validateAuthorization(authorizationHeader);
-//        String accessToken = authorizationHeader.split(" ")[1];
         LoginDto.Response jwtTokenResponseDto = loginService.login(loginRequestDto);
         return ResponseEntity.ok(jwtTokenResponseDto);
     }

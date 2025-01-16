@@ -4,6 +4,8 @@ import com.app.domain.common.BaseEntity;
 import com.app.domain.member.constant.Gender;
 import com.app.domain.member.constant.MemberStatus;
 import com.app.domain.member.constant.Role;
+import com.app.domain.qnaboard.entity.Comment;
+import com.app.domain.qnaboard.entity.QnaBoard;
 import com.app.global.jwt.dto.JwtTokenDto;
 import com.app.global.util.DateTimeUtils;
 import jakarta.persistence.*;
@@ -13,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -52,11 +55,19 @@ public class Member extends BaseEntity {
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 25) // TEMPORARILY_SUSPENDED 넣고싶을때를 고려
     private MemberStatus memberStatus;
 
     @Column(length = 250)
     private String refreshToken;
+
+    // 게시판 글
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QnaBoard> contents;
+
+    // 게시판 댓글
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     private LocalDateTime tokenExpirationTime;
 
@@ -74,6 +85,17 @@ public class Member extends BaseEntity {
         this.role = role;
         this.gender = gender;
         this.memberStatus = memberStatus;
+    }
+
+    /**연관관계 편의 메서드*/
+    public void addQnaBoard(QnaBoard qnaBoard) {
+        contents.add(qnaBoard);
+        qnaBoard.setMember(this);
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setMember(this);
     }
 
     public void updateRefreshToken(JwtTokenDto jwtTokenDto) {
