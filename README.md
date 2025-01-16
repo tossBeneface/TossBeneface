@@ -10,7 +10,7 @@
 
 (*jasypt : api key등 양방향 암호화 해주는 라이브러리)
 
-회원가입 : 
+
 
 ### 회원가입 요청
 POST http://localhost:8080/api/join
@@ -25,7 +25,7 @@ Content-Type: application/json
   "gender": "FEMALE"
 }
 
-로그인 :
+
 ###
 ### 로그인 요청
 POST http://localhost:8080/api/login
