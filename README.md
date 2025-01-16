@@ -13,6 +13,7 @@
 
 
 ### 회원가입 요청
+```
 POST http://localhost:8080/api/join
 Content-Type: application/json
 
@@ -24,10 +25,11 @@ Content-Type: application/json
   "role": "USER",
   "gender": "FEMALE"
 }
-
+```
 
 ###
 ### 로그인 요청
+```
 POST http://localhost:8080/api/login
 Content-Type: application/json
 
@@ -35,3 +37,4 @@ Content-Type: application/json
   "email": "test@example.com",
   "password": "password123"
 }
+```
