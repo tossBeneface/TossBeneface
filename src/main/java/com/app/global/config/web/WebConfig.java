@@ -22,13 +22,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
     private final AuthenticationInterceptor authenticationInterceptor;
-    private final MemberInfoArgumentResolver memberInfoArgumentResolver;
     private final AdminAuthorizationInterceptor adminAuthorizationInterceptor;
+    private final MemberInfoArgumentResolver memberInfoArgumentResolver;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -84,6 +84,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public MappingJackson2HttpMessageConverter jsonEscapeConverter() {
+        log.info("WebConfig - JSON Escape Converter 설정됨");
         ObjectMapper copy = objectMapper.copy();
         copy.getFactory().setCharacterEscapes(new HtmlCharacterEscapes());
         return new MappingJackson2HttpMessageConverter(copy);

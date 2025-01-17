@@ -27,6 +27,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         // 1. Authorization Header 검증
         String authorizationHeader = request.getHeader("Authorization");
+        log.info("Authorization Header: {}", authorizationHeader);
         AuthorizationHeaderUtils.validateAuthorization(authorizationHeader);
 
         // 2. TOKEN 검증
