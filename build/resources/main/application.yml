@@ -1,0 +1,57 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  # todo 개발 데이터베이스 연결
+  datasource:
+    url: jdbc:h2:file:./data/testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 500 # 일대다 컬렉션 조회 시 in절 사용
+    open-in-view: false # 영속성 컨텍스트의 생존 범위를 트랜잭션 범위로 한정 -> 컨트롤러에서 지연로딩으로 연관된 엔티티 가져오려고 하면 에러 발생
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    org.hibernate.type: trace
+    com.app: debug # todo 패키지 수정
+    org.springframework.security: DEBUG
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+token:
+  secret: ENC(RwHsLoX0h6jH5/4TbISBOZWdMBxyIOAD1tjXyzazpoGErQg8hO1XNrAsNi3BLFQy4oDDCNZgOXEG5x1aKYS0Vw==) # 임의의 문자열, 단 Base64 88문자 이상이어야
+  access-token-expiration-time: 900000 # 15분 1000(ms) x 60(s) x 15(m)
+  refresh-token-expiration-time: 1209600000 # 2주 1000(ms) x 60 (s) x 60(m) x 24(h) x 14(d)
+
+# 암호화해서 가져가고 싶은 내용 넣기
+jasypt:
+  password: ${PASSWORD}
