@@ -1,56 +1,99 @@
-
-### 파일 업로드 요청
-# curl -X POST http://localhost:8080/api/files/upload
-#-H "Authorization: Bearer YOUR_JWT_ACCESS_TOKEN"
-#-F "files=@/path/to/your/local/file1.png"
-#-F "files=@/path/to/your/local/file2.pdf"
-POST http://localhost:8080/api/files/upload
-Authorization: Bearer YOUR_JWT_ACCESS_TOKEN
+# curl -X POST http://localhost:8080/api/qnaboard/create
+#-H "Content-Type: multipart/form-data"
+#-F 'requestDto={"memberId":1,"title":"게시글 제목","content":"게시글 내용"};type=application/json'
+#-F 'files=@C:/path/to/your/file1.png'
+#-F 'files=@C:/path/to/your/file2.png'
+### 게시글 작성 요청 v2
+POST http://localhost:8080/api/qnaboard/create
+Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzcxNzQxMTUsImV4cCI6MTczNzE3NTAxNSwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0._IArbVO2atPGnEcGzJyE8njfENrhn4ezc-GpkLpV3guax7e_AH6J7HiXW-qRqOKfbNsMpWPaOrPDtUE8zSH_iQ
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
+Content-Disposition: form-data; name="requestDto"
+
+{"memberId":1,"title":"게시글 제목","content":"게시글 내용"}
+--WebAppBoundary
 Content-Disposition: form-data; name="files"; filename="file1.png"
 
-< \path\to\your\local\file1.png
+< C:\Users\User\bigproject\test\file1.png
 --WebAppBoundary
-Content-Disposition: form-data; name="files"; filename="file2.pdf"
+Content-Disposition: form-data; name="files"; filename="file1.png"
 
-< \path\to\your\local\file2.pdf
+< C:\Users\User\bigproject\test\file1.png
 --WebAppBoundary--
 
 ###
 
 
 
-###
-### 게시글 작성 요청
-# curl -X POST http://localhost:8080/api/qnaboards/create
-#-H "Authorization: Bearer YOUR_JWT_ACCESS_TOKEN"
-#-H "Content-Type: application/json"
-#-d '{
-#  "memberId": 1,
-#  "title": "boardTest 1",
-#  "content": "qna 게시판 게시글 내용",
-#  "attachmentUrls": [
-#    "https://ai0310bucket.s3.ap-southeast-2.amazonaws.com/file1.png",
-#    "https://ai0310bucket.s3.ap-southeast-2.amazonaws.com/file2.pdf"
-#  ]
-#}'
 
-
+### 게시글 작성 요청 v1
+# curl -X POST http://localhost:8080/api/qnaboard/create
+#-H "Authorization: Bearer {your_jwt_token}"
+#-H "Content-Type: multipart/form-data"
+#-F "memberId=1"
+#-F "title=게시글 제목"
+#-F "content=게시글 내용"
+#-F "files=@/path/to/your/file1.png"
+#-F "files=@/path/to/your/file2.png"
 POST http://localhost:8080/api/qnaboard/create
-Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzcwMTEzNDQsImV4cCI6MTczNzAxMjI0NCwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.t5Wh4r80S1GOH6M1h8tK6J75Es5XSNjzWgT7PK32pwnpy6WArVn3-RpBI8pis7BaiV2fAXoF0LEMyapPVvW83g
-Content-Type: application/json
+Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzcxMzEzODUsImV4cCI6MTczNzEzMjI4NSwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.w1KGueVpQiqZ3rqmgQlXVBxk_3fyGvuRHhadw85JbX5oDixPckF8sVlT9gqbMs1fjOhjLHjCSrS6ynQ4-l6keg
+Content-Type: multipart/form-data; boundary=WebAppBoundary
 
-{
-  "memberId": 1,
-  "title": "boardTest 1",
-  "content": "qna 게시판 게시글 내용",
-  "attachmentUrls": [
-    "https://ai0310bucket.s3.ap-southeast-2.amazonaws.com/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7+2025-01-03+103457.png",
-    "https://ai0310bucket.s3.ap-southeast-2.amazonaws.com/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7+2025-01-03+103457.png"
-  ]
-}
+--WebAppBoundary
+Content-Disposition: form-data; name="memberId"
+
+1
+--WebAppBoundary
+Content-Disposition: form-data; name="title"
+
+게시글 제목
+--WebAppBoundary
+Content-Disposition: form-data; name="content"
+
+게시글 내용
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="file1.png"
+
+< C:\Users\User\bigproject\test\file1.png
+--WebAppBoundary
+###
+
+### 첨부파일 하나 업로드 API
+# curl -X POST "http://localhost:8080/api/files/update/{fileId}"
+# -H "Content-Type: multipart/form-data"
+# -F "file=@/path/to/your/file"
+POST http://localhost:8080/api/files/update/1
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="file1.png"
+
+< \path\to\your\file1.png
+--WebAppBoundary--
+
+### 첨부파일 대량 업로드 API
+# curl -X POST http://localhost:8080/api/files/upload
+#-H "Authorization: Bearer {your_jwt_token}"
+#-H "Content-Type: multipart/form-data"
+#-F "files=@/path/to/your/file1.png"
+#-F "files=@/path/to/your/file2.png"
+POST http://localhost:8080/api/files/upload
+Authorization: Bearer {your_jwt_token}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="file1.png"
+
+< \path\to\your\file1.png
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="file2.png"
+
+< \path\to\your\file2.png
+--WebAppBoundary--
+
+###
+
 
 ###
 GET http://localhost:8080/api/qnaboard/test

@@ -94,6 +94,13 @@ public class QnaBoard extends BaseEntity {
         attachment.setQnaBoard(this); // 양방향 연관 관계 설정
     }
 
+    //Attachment 일괄 추가
+    public void addAttachments(List<Attachment> attachments) {
+        if (attachments != null) {
+            attachments.forEach(this::addAttachment); // addAttachment 호출
+        }
+    }
+
     public void removeAttachment(Attachment attachment) {
         attachments.remove(attachment);
         attachment.setQnaBoard(null); // 연관 관계 해제

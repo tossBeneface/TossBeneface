@@ -7,7 +7,8 @@ import com.app.domain.member.service.MemberService;
 import com.app.domain.qnaboard.constant.ContentStatus;
 import com.app.domain.qnaboard.entity.Attachment;
 import com.app.domain.qnaboard.entity.QnaBoard;
-import com.app.domain.qnaboard.service.QnaBoardDomainService;
+import com.app.domain.qnaboard.service.AttachmentService;
+import com.app.domain.qnaboard.service.QnaBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,35 +17,38 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class QnaBoardService {
+@Transactional
+public class QnaBoardInfoService {
 
-    private final QnaBoardDomainService qnaBoardDomainService;
+    private final QnaBoardService qnaBoardService;
     private final MemberService memberService;
     private final FileUploadService fileUploadService;
+    private final AttachmentService attachmentService;
 
     @Transactional
     public Long createQnaBoard(QnaBoardDto.Request requestDto) {
         Member member = memberService.findMemberById(requestDto.getMemberId());
 
-        // 파일 업로드 및 Attachment 엔티티 리스트 생성
-        List<Attachment> attachments = fileUploadService.uploadFiles(requestDto.getFiles());
-
-        // QnaBoard 엔티티 생성
+        /// 첨부파일 없이 QnaBoard 저장
         QnaBoard qnaBoard = QnaBoard.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
                 .member(member)
-                .attachments(attachments) // 업로드된 첨부파일 리스트 설정
                 .contentStatus(ContentStatus.ACTIVATE)
                 .build();
+        qnaBoard = qnaBoardService.createQnaBoard(qnaBoard);
+
+        // 첨부파일 업로드 후 QnaBoard와 연결
+        List<Attachment> attachments = attachmentService.saveAttachments(requestDto.getFiles(), qnaBoard);
+        qnaBoard.addAttachments(attachments);
 
         // QnaBoard 저장 및 ID 반환
-        return qnaBoardDomainService.createQnaBoard(qnaBoard).getQnaBoardId();
+        return qnaBoard.getQnaBoardId();
     }
 
     @Transactional(readOnly = true)
     public QnaBoardDto.Response getQnaBoardById(Long qnaBoardId) {
-        QnaBoard qnaBoard = qnaBoardDomainService.findQnaBoardById(qnaBoardId)
+        QnaBoard qnaBoard = qnaBoardService.findQnaBoardById(qnaBoardId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
         return QnaBoardDto.Response.of(qnaBoard);
     }

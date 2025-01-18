@@ -1,11 +1,12 @@
 package com.app.api.qnaboard.controller;
 
 import com.app.api.qnaboard.dto.QnaBoardDto;
-import com.app.api.qnaboard.service.QnaBoardService;
+import com.app.api.qnaboard.service.QnaBoardInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QnaBoardController {
 
-    private final QnaBoardService qnaBoardService;
+    private final QnaBoardInfoService qnaBoardService;
 
     @GetMapping("/test")
     public ResponseEntity<String> testInterceptor() {
@@ -23,8 +24,9 @@ public class QnaBoardController {
 
     @PostMapping("/create")
     public ResponseEntity<Long> createQnaBoard(
-            @Validated @RequestBody QnaBoardDto.Request requestDto) {
-
+            @RequestPart(value = "requestDto") @Validated QnaBoardDto.Request requestDto,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+        requestDto.setFiles(files);
         Long qnaBoardId = qnaBoardService.createQnaBoard(requestDto);
         return ResponseEntity.ok(qnaBoardId);
     }

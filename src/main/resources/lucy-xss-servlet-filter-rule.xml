@@ -119,5 +119,15 @@
                 </param>
             </params>
         </url-rule>
+        <url-rule>
+            <url>/api/qnaboard/create</url>
+            <params>
+                <param name="files" useDefender="false" />
+                <param name="memberId" useDefender="false" />
+                <param name="title" useDefender="false" />
+                <param name="content" useDefender="false" />
+                <param name="Content-Type" useDefender="false" />
+            </params>
+        </url-rule>
     </url-rule-set>
 </config>

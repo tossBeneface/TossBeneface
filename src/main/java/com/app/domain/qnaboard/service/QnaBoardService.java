@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class QnaBoardDomainService {
+public class QnaBoardService {
 
     private final QnaBoardRepository qnaBoardRepository;
 

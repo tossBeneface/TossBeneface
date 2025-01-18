@@ -46,6 +46,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(adminAuthorizationInterceptor)
             .order(2)
             .addPathPatterns("/api/admin/**");
+        log.debug("등록된 인터셉터 경로: /api/**");
+//        log.debug("Interceptor 호출: {}", request.getRequestURI());
+
     }
 
     @Override
