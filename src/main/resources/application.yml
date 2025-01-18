@@ -66,7 +66,7 @@ jasypt:
 cloud:
   aws:
     credentials:
-      accessKey: AKIAEXAMPLEACCESSKEY1234
+      accessKey: AKIA47GB7YGCHNK5IMEM
       secretKey: ENC(/GXm6N9N4I4tA4/McUHWeexBUVel2LzZjKc5ahr7cavstjxEZl8pWCxYhn502j16z5dnYNcbB6o=)
     region:
-      static: ap-northeast-2 # AWS 리전
+      static: ap-southeast-2 # AWS 리전

@@ -5,7 +5,6 @@ import com.app.api.qnaboard.dto.QnaBoardDto;
 import com.app.domain.member.entity.Member;
 import com.app.domain.member.service.MemberService;
 import com.app.domain.qnaboard.constant.ContentStatus;
-import com.app.domain.qnaboard.entity.Attachment;
 import com.app.domain.qnaboard.entity.QnaBoard;
 import com.app.domain.qnaboard.service.AttachmentService;
 import com.app.domain.qnaboard.service.QnaBoardService;
@@ -13,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,14 +33,15 @@ public class QnaBoardInfoService {
         QnaBoard qnaBoard = QnaBoard.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
+                .attachments(new ArrayList<>())
                 .member(member)
                 .contentStatus(ContentStatus.ACTIVATE)
                 .build();
-        qnaBoard = qnaBoardService.createQnaBoard(qnaBoard);
+        QnaBoard savedBoard = qnaBoardService.createQnaBoard(qnaBoard);
 
-        // 첨부파일 업로드 후 QnaBoard와 연결
-        List<Attachment> attachments = attachmentService.saveAttachments(requestDto.getFiles(), qnaBoard);
-        qnaBoard.addAttachments(attachments);
+        if (requestDto.getFiles() != null && !requestDto.getFiles().isEmpty()) {
+            attachmentService.saveAttachments(requestDto.getFiles(), savedBoard);
+        }
 
         // QnaBoard 저장 및 ID 반환
         return qnaBoard.getQnaBoardId();

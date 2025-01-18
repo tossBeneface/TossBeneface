@@ -27,7 +27,11 @@ public class AttachmentService {
         }
 
         return files.stream()
-                .map(file -> createAttachment(file, qnaBoard))
+                .map(file -> {
+                    Attachment attachment = createAttachment(file, qnaBoard);
+                    qnaBoard.addAttachment(attachment);
+                    return attachment;
+                })
                 .collect(Collectors.toList());
     }
 
