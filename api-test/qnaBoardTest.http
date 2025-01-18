@@ -3,9 +3,37 @@
 #-F 'requestDto={"memberId":1,"title":"게시글 제목","content":"게시글 내용"};type=application/json'
 #-F 'files=@C:/path/to/your/file1.png'
 #-F 'files=@C:/path/to/your/file2.png'
-### 게시글 작성 요청 v2
+### 게시글 작성 요청 ver3
 POST http://localhost:8080/api/qnaboard/create
 Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzcxNzQxMTUsImV4cCI6MTczNzE3NTAxNSwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0._IArbVO2atPGnEcGzJyE8njfENrhn4ezc-GpkLpV3guax7e_AH6J7HiXW-qRqOKfbNsMpWPaOrPDtUE8zSH_iQ
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="requestDto"
+
+{"memberId":1,"title":"게시글 제목","content":"게시글 내용"}
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="file1.png"
+
+< C:\Users\User\bigproject\test\file1.png
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="file1.png"
+
+< C:\Users\User\bigproject\test\file1.png
+--WebAppBoundary--
+
+
+
+
+
+# curl -X POST http://localhost:8080/api/qnaboard/create
+#-H "Content-Type: multipart/form-data"
+#-F 'requestDto={"memberId":1,"title":"게시글 제목","content":"게시글 내용"};type=application/json'
+#-F 'files=@C:/path/to/your/file1.png'
+#-F 'files=@C:/path/to/your/file2.png'
+### 게시글 작성 요청 v2
+POST http://localhost:8080/api/qnaboard/create
+Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzcxNzYzNzEsImV4cCI6MTczNzE3NzI3MSwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.mfGFeRVUX2XpnRPD132Kw8LkTcMhVInywStu8HtC0rBp1LZ1b_7snguVL2D_aQa86H5_yxIUB1g8jBhM6LS2HQ
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary

@@ -2,11 +2,14 @@ package com.app.api.qnaboard.controller;
 
 import com.app.api.qnaboard.dto.QnaBoardDto;
 import com.app.api.qnaboard.service.QnaBoardInfoService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;
 
@@ -23,10 +26,23 @@ public class QnaBoardController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Long> createQnaBoard(
-            @RequestPart(value = "requestDto") @Validated QnaBoardDto.Request requestDto,
-            @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+    public ResponseEntity<Long> createQnaBoard(MultipartHttpServletRequest request) {
+        // JSON 데이터 추출
+        String requestDtoJson = request.getParameter("requestDto");
+        ObjectMapper objectMapper = new ObjectMapper();
+        QnaBoardDto.Request requestDto;
+
+        try {
+            requestDto = objectMapper.readValue(requestDtoJson, QnaBoardDto.Request.class);
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("잘못된 JSON 형식입니다.", e);
+        }
+
+        // 파일 데이터 추출
+        List<MultipartFile> files = request.getFiles("files");
         requestDto.setFiles(files);
+
+        // 서비스 호출
         Long qnaBoardId = qnaBoardService.createQnaBoard(requestDto);
         return ResponseEntity.ok(qnaBoardId);
     }

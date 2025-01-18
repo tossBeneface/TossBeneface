@@ -62,3 +62,11 @@ token:
 # 암호화해서 가져가고 싶은 내용 넣기
 jasypt:
   password: ${PASSWORD}
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAEXAMPLEACCESSKEY1234
+      secretKey: ENC(hKrxZffKFxDKU0Bx7X3M/gkGmPcNbB8b9bK7NMEzthluUFKH2en+QUprXQNlwZ9tXIBKw2LtZww=)
+    region:
+      static: ap-northeast-2 # AWS 리전
