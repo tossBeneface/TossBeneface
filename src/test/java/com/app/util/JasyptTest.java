@@ -14,11 +14,10 @@ public class JasyptTest {
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
 
         // encryptor와 config 설정
-//        encryptor.setPoolSize(4); // Pooled Encryptor 설정
-//        encryptor.setPassword(password); // 암호화 비밀번호 설정
         config.setPoolSize(4);
 //        config.setAlgorithm("PBEWithHMACSHA512AndAES_256"); // 암호화 알고리즘 설정
-        config.setAlgorithm("PBEWithMD5AndDES"); // 암호화 알고리즘 설정
+        config.setAlgorithm("PBEWithMD5AndTripleDES"); // 암호화 알고리즘 설정
+//        config.setAlgorithm("PBEWithMD5AndDES"); // 암호화 알고리즘 설정
         config.setPassword(password); // 암호화 비밀번호 설정
         config.setKeyObtentionIterations("1000"); // 키 스트레칭 반복 횟수 설정
         config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator"); // Salt 생성기 설정

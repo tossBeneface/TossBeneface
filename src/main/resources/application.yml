@@ -55,7 +55,7 @@ feign:
         readTimeout: 5000
 
 token:
-  secret: ENC(RwHsLoX0h6jH5/4TbISBOZWdMBxyIOAD1tjXyzazpoGErQg8hO1XNrAsNi3BLFQy4oDDCNZgOXEG5x1aKYS0Vw==) # 임의의 문자열, 단 Base64 88문자 이상이어야
+  secret: ENC(NhiNrYxqLjQazS5r7fsuWewxj+0tyjzDqBXaYRGNJlBz9uC4ANMy4KgSnLPUQz3tspY3DRM+JOHJej3pt9rv889oNml29Adpj5tyy+krjcFNneThcIK4FMTus7CdE4AzcAZGzf2erd8=) # 임의의 문자열, 단 Base64 88문자 이상이어야
   access-token-expiration-time: 900000 # 15분 1000(ms) x 60(s) x 15(m)
   refresh-token-expiration-time: 1209600000 # 2주 1000(ms) x 60 (s) x 60(m) x 24(h) x 14(d)
 
@@ -67,6 +67,6 @@ cloud:
   aws:
     credentials:
       accessKey: AKIAEXAMPLEACCESSKEY1234
-      secretKey: ENC(hKrxZffKFxDKU0Bx7X3M/gkGmPcNbB8b9bK7NMEzthluUFKH2en+QUprXQNlwZ9tXIBKw2LtZww=)
+      secretKey: ENC(/GXm6N9N4I4tA4/McUHWeexBUVel2LzZjKc5ahr7cavstjxEZl8pWCxYhn502j16z5dnYNcbB6o=)
     region:
       static: ap-northeast-2 # AWS 리전

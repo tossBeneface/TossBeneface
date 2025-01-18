@@ -33,7 +33,7 @@ Content-Disposition: form-data; name="files"; filename="file1.png"
 #-F 'files=@C:/path/to/your/file2.png'
 ### 게시글 작성 요청 v2
 POST http://localhost:8080/api/qnaboard/create
-Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzcxNzYzNzEsImV4cCI6MTczNzE3NzI3MSwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.mfGFeRVUX2XpnRPD132Kw8LkTcMhVInywStu8HtC0rBp1LZ1b_7snguVL2D_aQa86H5_yxIUB1g8jBhM6LS2HQ
+Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzcxODc1OTUsImV4cCI6MTczNzE4ODQ5NSwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.Gfeu5pPTS1Te2IdyqfyQW4jzkLw4_4-WnyGv_RcmJP-ldLrxrH8_imRMeY70pjU_oAg615WlnZQ382b0r1zZJw
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
