@@ -2,6 +2,7 @@ package com.app.api.qnaboard.controller;
 
 import com.app.api.qnaboard.dto.QnaBoardDto;
 import com.app.api.qnaboard.service.QnaBoardInfoService;
+import com.app.global.util.MultipartRequestParserUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,19 +27,12 @@ public class QnaBoardController {
 
     @PostMapping("/create")
     public ResponseEntity<Long> createQnaBoard(MultipartHttpServletRequest request) {
-        // JSON 데이터 추출
-        String requestDtoJson = request.getParameter("requestDto");
-        ObjectMapper objectMapper = new ObjectMapper();
-        QnaBoardDto.Request requestDto;
 
-        try {
-            requestDto = objectMapper.readValue(requestDtoJson, QnaBoardDto.Request.class);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("잘못된 JSON 형식입니다.", e);
-        }
+        // JSON 데이터 파싱
+        QnaBoardDto.Request requestDto = MultipartRequestParserUtils.parseJson(request, "requestDto", QnaBoardDto.Request.class);
 
-        // 파일 데이터 추출
-        List<MultipartFile> files = request.getFiles("files");
+        // 파일 데이터 파싱
+        List<MultipartFile> files = MultipartRequestParserUtils.parseFiles(request, "files");
         requestDto.setFiles(files);
 
         // 서비스 호출
@@ -59,12 +53,20 @@ public class QnaBoardController {
     }
 
     @PutMapping("/{qnaBoardId}")
-    public ResponseEntity<QnaBoardDto.Response> updateQnaBoard(
+    public ResponseEntity<Long> updateQnaBoard(
             @PathVariable("qnaBoardId") Long qnaBoardId,
-            @RequestBody QnaBoardDto.UpdateRequest updateRequest) {
+            MultipartHttpServletRequest request) {
 
-        QnaBoardDto.Response response = qnaBoardInfoService.updateQnaBoard(qnaBoardId, updateRequest);
-        return ResponseEntity.ok(response);
+        // JSON 데이터 파싱
+        QnaBoardDto.UpdateRequest updateRequest = MultipartRequestParserUtils.parseJson(request, "requestDto", QnaBoardDto.UpdateRequest.class);
+
+        // 파일 데이터 파싱
+        List<MultipartFile> files = MultipartRequestParserUtils.parseFiles(request, "files");
+
+        // 서비스 호출
+        Long updatedQnaBoardId = qnaBoardInfoService.updateQnaBoard(qnaBoardId, updateRequest, files);
+
+        return ResponseEntity.ok(updatedQnaBoardId);
     }
 
     @DeleteMapping("/{qnaBoardId}")

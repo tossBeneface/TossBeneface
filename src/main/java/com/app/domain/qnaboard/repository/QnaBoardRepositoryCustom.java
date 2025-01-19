@@ -9,7 +9,7 @@ public interface QnaBoardRepositoryCustom {
 
     List<QnaBoard> findAllQnaBoardsWithDetails();
 
-    QnaBoardDto.Response findQnaBoardWithDetails(Long qnaBoardId);
+    QnaBoard findQnaBoardWithDetails(Long qnaBoardId);
 
     QnaBoard updateQnaBoard(Long qnaBoardId, QnaBoardDto.UpdateRequest updateRequest);
 }

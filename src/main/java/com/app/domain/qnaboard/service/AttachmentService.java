@@ -50,4 +50,13 @@ public class AttachmentService {
 
         return attachmentRepository.save(attachment);
     }
+
+    @Transactional
+    public void deleteAttachmentsByQnaBoard(QnaBoard qnaBoard) {
+        List<Attachment> attachments = attachmentRepository.findAllByQnaBoard(qnaBoard);
+        for (Attachment attachment : attachments) {
+            attachmentRepository.delete(attachment);
+            fileUploadService.deleteFileFromS3(attachment.getUrl());
+        }
+    }
 }

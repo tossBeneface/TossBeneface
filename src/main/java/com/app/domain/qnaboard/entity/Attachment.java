@@ -2,6 +2,7 @@ package com.app.domain.qnaboard.entity;
 
 import com.app.domain.common.BaseEntity;
 import com.app.domain.qnaboard.constant.FileStatus;
+import com.app.global.util.FileUtils;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -59,13 +60,8 @@ public class Attachment extends BaseEntity {
 
     public void updateFile(String newFileUrl) {
         this.url = newFileUrl;
-        this.filePath = extractFileName(newFileUrl); // URL에서 파일 이름 추출 로직
+        this.filePath =  FileUtils.extractFileNameFromUrl(newFileUrl);// URL에서 파일 이름 추출 로직
         this.fileStatus = FileStatus.ACTIVATE;
-    }
-
-    // URL에서 파일 이름 추출
-    private String extractFileName(String url) {
-        return url.substring(url.lastIndexOf('/') + 1);
     }
 
 }

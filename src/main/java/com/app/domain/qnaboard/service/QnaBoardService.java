@@ -28,9 +28,12 @@ public class QnaBoardService {
 
 
     @Transactional(readOnly = true)
-    public QnaBoardDto.Response getQnaBoardWithDetails(Long qnaBoardId) {
-        // Query data via repository and transform it to DTO
-        return qnaBoardRepository.findQnaBoardWithDetails(qnaBoardId);
+    public QnaBoard findQnaBoardWithDetails(Long qnaBoardId) {
+        QnaBoard qnaBoard = qnaBoardRepository.findQnaBoardWithDetails(qnaBoardId);
+        if (qnaBoard == null) {
+            throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+        }
+        return qnaBoard;
     }
 
     @Transactional

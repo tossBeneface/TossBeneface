@@ -2,7 +2,6 @@ package com.app.domain.qnaboard.repository;
 
 import com.app.api.qnaboard.dto.QnaBoardDto;
 import com.app.domain.member.entity.QMember;
-import com.app.domain.qnaboard.entity.Attachment;
 import com.app.domain.qnaboard.entity.QAttachment;
 import com.app.domain.qnaboard.entity.QQnaBoard;
 import com.app.domain.qnaboard.entity.QnaBoard;
@@ -26,30 +25,18 @@ public class QnaBoardRepositoryImpl implements QnaBoardRepositoryCustom {
     }
 
     @Override
-    public QnaBoardDto.Response findQnaBoardWithDetails(Long qnaBoardId) {
+    public QnaBoard findQnaBoardWithDetails(Long qnaBoardId) {
         QQnaBoard qQnaBoard = QQnaBoard.qnaBoard;
         QAttachment qAttachment = QAttachment.attachment;
         QMember qMember = QMember.member;
 
         // QueryDSL로 데이터 조회
-        QnaBoard qnaBoard = queryFactory
+        return queryFactory
                 .selectFrom(qQnaBoard)
                 .leftJoin(qQnaBoard.attachments, qAttachment).fetchJoin()
                 .leftJoin(qQnaBoard.member, qMember).fetchJoin()
                 .where(qQnaBoard.qnaBoardId.eq(qnaBoardId))
                 .fetchOne();
-
-        if (qnaBoard == null) {
-            throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
-        }
-
-        // Attachment URLs
-        List<String> attachmentUrls = qnaBoard.getAttachments().stream()
-                .map(Attachment::getUrl)
-                .toList();
-
-        // DTO로 변환
-        return QnaBoardDto.Response.of(qnaBoard, attachmentUrls, qnaBoard.getMember().getMemberName());
     }
 
     @Override

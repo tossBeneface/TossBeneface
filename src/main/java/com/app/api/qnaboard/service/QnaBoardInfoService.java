@@ -5,11 +5,13 @@ import com.app.domain.member.entity.Member;
 import com.app.domain.member.service.MemberService;
 import com.app.domain.qnaboard.constant.ContentStatus;
 import com.app.domain.qnaboard.entity.QnaBoard;
+import com.app.domain.qnaboard.entity.Attachment;
 import com.app.domain.qnaboard.service.AttachmentService;
 import com.app.domain.qnaboard.service.QnaBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,13 @@ public class QnaBoardInfoService {
 
     @Transactional(readOnly = true)
     public QnaBoardDto.Response getQnaBoardById(Long qnaBoardId) {
-        return qnaBoardService.getQnaBoardWithDetails(qnaBoardId);
+        QnaBoard qnaBoard = qnaBoardService.findQnaBoardWithDetails(qnaBoardId);
+
+        List<String> attachmentUrls = qnaBoard.getAttachments().stream()
+                .map(Attachment::getUrl)
+                .toList();
+
+        return QnaBoardDto.Response.of(qnaBoard, attachmentUrls, qnaBoard.getMember().getMemberName());
     }
 
 
@@ -72,9 +80,24 @@ public class QnaBoardInfoService {
     }
 
     @Transactional
-    public QnaBoardDto.Response updateQnaBoard(Long qnaBoardId, QnaBoardDto.UpdateRequest updateRequest) {
-        return qnaBoardService.updateQnaBoard(qnaBoardId, updateRequest);
+    public Long updateQnaBoard(Long qnaBoardId, QnaBoardDto.UpdateRequest updateRequest, List<MultipartFile> files) {
+        // QnaBoard 조회
+        QnaBoard qnaBoard = qnaBoardService.findQnaBoardWithDetails(qnaBoardId);
+        if (qnaBoard == null) {
+            throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+        }
+
+        qnaBoard.update(updateRequest.getTitle(), updateRequest.getContent());
+
+        // 기존 첨부파일 삭제 및 새로운 파일 저장
+        if (files != null && !files.isEmpty()) {
+            attachmentService.deleteAttachmentsByQnaBoard(qnaBoard);
+            attachmentService.saveAttachments(files, qnaBoard);
+        }
+
+        return qnaBoard.getQnaBoardId();
     }
+
 
     // 잘 처리됐다 라는 response를 돌려줘야 (공통 response작성)
     public void deleteQnaBoard(Long qnaBoardId) {

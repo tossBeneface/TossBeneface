@@ -3,6 +3,7 @@ package com.app.api.file.service;
 
 import com.app.domain.qnaboard.entity.Attachment;
 import com.app.domain.qnaboard.repository.AttachmentRepository;
+import com.app.global.util.FileUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,15 @@ public class FileUploadService {
         }
 
         return updatedAttachments;
+    }
+
+    public void deleteFileFromS3(String fileUrl) {
+        String fileName = FileUtils.extractFileNameFromUrl(fileUrl);
+        try {
+            s3Client.deleteObject(builder -> builder.bucket(bucketName).key(fileName));
+        } catch (Exception e) {
+            throw new RuntimeException("S3 파일 삭제 중 오류가 발생했습니다.", e);
+        }
     }
 
     private String generateUniqueFileName(String originalFilename) {
