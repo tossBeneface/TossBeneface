@@ -1,5 +1,7 @@
 package com.app.domain.qnaboard.service;
 
+import com.app.api.qnaboard.dto.QnaBoardDto;
+import com.app.domain.qnaboard.entity.Attachment;
 import com.app.domain.qnaboard.entity.QnaBoard;
 import com.app.domain.qnaboard.repository.QnaBoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,34 +16,36 @@ public class QnaBoardService {
 
     private final QnaBoardRepository qnaBoardRepository;
 
-
     @Transactional
     public QnaBoard createQnaBoard(QnaBoard qnaBoard) {
         return qnaBoardRepository.save(qnaBoard);
     }
 
     @Transactional(readOnly = true)
-    public Optional<QnaBoard> findQnaBoardByIdWithDetails(Long qnaBoardId) {
-        return qnaBoardRepository.findByIdWithDetails(qnaBoardId);
+    public List<QnaBoard> findAllQnaBoardsWithDetails() {
+        return qnaBoardRepository.findAllQnaBoardsWithDetails();
     }
 
-    @Transactional(readOnly = true)
-    public Optional<QnaBoard> findQnaBoardById(Long qnaBoardId) {
-        return qnaBoardRepository.findById(qnaBoardId);
-    }
 
     @Transactional(readOnly = true)
-    public List<QnaBoard> findQnaBoards() {
-        return qnaBoardRepository.findAll();
+    public QnaBoardDto.Response getQnaBoardWithDetails(Long qnaBoardId) {
+        // Query data via repository and transform it to DTO
+        return qnaBoardRepository.findQnaBoardWithDetails(qnaBoardId);
     }
 
     @Transactional
-    public void updateQnaBoard(QnaBoard qnaBoard, String newTitle, String newContent) {
-        if ((newTitle == null || newTitle.isEmpty()) && (newContent == null || newContent.isEmpty())) {
-            throw new IllegalArgumentException("제목과 내용 중 하나는 반드시 입력해야 합니다.");
-        }
-        qnaBoard.update(newTitle, newContent);
+    public QnaBoardDto.Response updateQnaBoard(Long qnaBoardId, QnaBoardDto.UpdateRequest updateRequest) {
+        QnaBoard updatedQnaBoard = qnaBoardRepository.updateQnaBoard(qnaBoardId, updateRequest);
+
+        // 첨부파일 URL만 추출
+        List<String> attachmentUrls = updatedQnaBoard.getAttachments().stream()
+                .map(Attachment::getUrl)
+                .toList();
+
+        // Response DTO로 변환
+        return QnaBoardDto.Response.of(updatedQnaBoard, attachmentUrls, updatedQnaBoard.getMember().getMemberName());
     }
+
 
     @Transactional
     public void deleteQnaBoard(QnaBoard qnaBoard) {

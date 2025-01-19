@@ -52,6 +52,11 @@ public class Attachment extends BaseEntity {
         }
     }
 
+    public Attachment(String url, QnaBoard qnaBoard) {
+        this.url = url;
+        this.qnaBoard = qnaBoard;
+    }
+
     public void updateFile(String newFileUrl) {
         this.url = newFileUrl;
         this.filePath = extractFileName(newFileUrl); // URL에서 파일 이름 추출 로직

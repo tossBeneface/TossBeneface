@@ -5,7 +5,6 @@ import com.app.api.qnaboard.service.QnaBoardInfoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -18,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QnaBoardController {
 
-    private final QnaBoardInfoService qnaBoardService;
+    private final QnaBoardInfoService qnaBoardInfoService;
 
     @GetMapping("/test")
     public ResponseEntity<String> testInterceptor() {
@@ -43,33 +42,34 @@ public class QnaBoardController {
         requestDto.setFiles(files);
 
         // 서비스 호출
-        Long qnaBoardId = qnaBoardService.createQnaBoard(requestDto);
+        Long qnaBoardId = qnaBoardInfoService.createQnaBoard(requestDto);
         return ResponseEntity.ok(qnaBoardId);
     }
 
     @GetMapping("/{qnaBoardId}")
-    public ResponseEntity<QnaBoardDto.Response> getQnaBoard(@PathVariable Long qnaBoardId) {
-        QnaBoardDto.Response responseDto = qnaBoardService.getQnaBoardById(qnaBoardId);
+    public ResponseEntity<QnaBoardDto.Response> getQnaBoard(@PathVariable("qnaBoardId") Long qnaBoardId) {
+        QnaBoardDto.Response responseDto = qnaBoardInfoService.getQnaBoardById(qnaBoardId);
         return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<QnaBoardDto.Response>> getAllQnaBoards() {
-        List<QnaBoardDto.Response> responseDtos = qnaBoardService.getAllQnaBoards();
-        return ResponseEntity.ok(responseDtos);
+    public ResponseEntity<List<QnaBoardDto.Summary>> getAllQnaBoards() {
+        List<QnaBoardDto.Summary> qnaBordSummaries = qnaBoardInfoService.getQnaBoardSummaries();
+        return ResponseEntity.ok(qnaBordSummaries);
     }
 
     @PutMapping("/{qnaBoardId}")
-    public ResponseEntity<Void> updateQnaBoard(
-            @PathVariable Long qnaBoardId,
-            @Validated @RequestBody QnaBoardDto.Request requestDto) {
-        qnaBoardService.updateQnaBoard(qnaBoardId, requestDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<QnaBoardDto.Response> updateQnaBoard(
+            @PathVariable("qnaBoardId") Long qnaBoardId,
+            @RequestBody QnaBoardDto.UpdateRequest updateRequest) {
+
+        QnaBoardDto.Response response = qnaBoardInfoService.updateQnaBoard(qnaBoardId, updateRequest);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{qnaBoardId}")
-    public ResponseEntity<Void> deleteQnaBoard(@PathVariable Long qnaBoardId) {
-        qnaBoardService.deleteQnaBoard(qnaBoardId);
+    public ResponseEntity<Void> deleteQnaBoard(@PathVariable("qnaBoardId") Long qnaBoardId) {
+        qnaBoardInfoService.deleteQnaBoard(qnaBoardId);
         return ResponseEntity.ok().build();
     }
 }

@@ -1,7 +1,6 @@
 package com.app.api.qnaboard.dto;
 
 import com.app.domain.qnaboard.constant.ContentStatus;
-import com.app.domain.qnaboard.entity.Attachment;
 import com.app.domain.qnaboard.entity.QnaBoard;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -10,8 +9,8 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class QnaBoardDto {
 
@@ -64,17 +63,39 @@ public class QnaBoardDto {
         @Schema(description = "첨부파일 URL 리스트", example = ".....", required = true)
         private List<String> attachmentUrls;
 
-        public static QnaBoardDto.Response of(QnaBoard qnaBoard) {
+        public static QnaBoardDto.Response of(QnaBoard qnaBoard, List<String> attachmentUrls, String memberName) {
             return Response.builder()
+                    .qnaBoardId(qnaBoard.getQnaBoardId())
                     .title(qnaBoard.getTitle())
                     .content(qnaBoard.getContent())
+                    .memberName(memberName)
+                    .attachmentUrls(attachmentUrls)
                     .contentStatus(qnaBoard.getContentStatus())
 //                    .comments(qnaBoard.getComments()) // 필요 시 Comment DTO로 변환
-                    .attachmentUrls(qnaBoard.getAttachments().stream()
-                            .map(Attachment::getUrl) // Attachment의 URL을 추출
-                            .collect(Collectors.toList())
-                    )
                     .build();
         }
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateRequest {
+        @Schema(description = "제목", example = "상권리포트에 대해 궁금한게 있어요", required = true)
+        private String title;            // 게시글 제목
+        @Schema(description = "내용", example = "상권리포트 차트를 보면 이런 이런 내용이 있는데 ...", required = true)
+        private String content;          // 게시글 내용
+        @Schema(description = "첨부파일 URL 리스트", example = ".....", required = true)
+        private List<String> attachmentUrls; // 첨부파일 URL
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class Summary {
+        private Long id;            // 게시글 ID
+        private String title;       // 게시글 제목
+        private String authorName;  // 작성자 이름
+        private LocalDateTime createdAt;  // 작성일
+        private boolean hasComments;      // 댓글 존재 여부
+    }
+
 }

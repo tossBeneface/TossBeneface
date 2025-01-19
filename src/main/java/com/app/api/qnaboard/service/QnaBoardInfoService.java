@@ -47,23 +47,33 @@ public class QnaBoardInfoService {
 
     @Transactional(readOnly = true)
     public QnaBoardDto.Response getQnaBoardById(Long qnaBoardId) {
-        QnaBoard qnaBoard = qnaBoardService.findQnaBoardByIdWithDetails(qnaBoardId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
-
-        return QnaBoardDto.Response.of(qnaBoard);
+        return qnaBoardService.getQnaBoardWithDetails(qnaBoardId);
     }
+
 
     @Transactional(readOnly = true)
-    public List<QnaBoardDto.Response> getAllQnaBoards() {
-//        return qnaBoardDomainService.findQnaBoards()
-//                .stream()
-//                .map(QnaBoardDto.Response::of)
-//                .collect();
-        return null;
+    public List<QnaBoardDto.Summary> getQnaBoardSummaries() {
+        List<QnaBoard> qnaBoards = qnaBoardService.findAllQnaBoardsWithDetails();
+
+        return qnaBoards.stream()
+                .map(qnaBoard -> {
+                    String authorName = qnaBoard.getMember() != null ? qnaBoard.getMember().getMemberName() : "알 수 없음";
+                    boolean hasComments = qnaBoard.getComments() != null && !qnaBoard.getComments().isEmpty();
+
+                    return new QnaBoardDto.Summary(
+                            qnaBoard.getQnaBoardId(),
+                            qnaBoard.getTitle(),
+                            authorName,
+                            qnaBoard.getCreatedAt(),
+                            hasComments
+                    );
+                })
+                .toList();
     }
 
-    public QnaBoardDto.Response updateQnaBoard(Long qnaBoardId, QnaBoardDto.Request requestDto) {
-        return null;
+    @Transactional
+    public QnaBoardDto.Response updateQnaBoard(Long qnaBoardId, QnaBoardDto.UpdateRequest updateRequest) {
+        return qnaBoardService.updateQnaBoard(qnaBoardId, updateRequest);
     }
 
     // 잘 처리됐다 라는 response를 돌려줘야 (공통 response작성)
