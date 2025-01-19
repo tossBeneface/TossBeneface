@@ -50,43 +50,6 @@ Content-Disposition: form-data; name="files"; filename="file1.png"
 < C:\Users\User\bigproject\test\file1.png
 --WebAppBoundary--
 
-###
-
-
-
-
-### 게시글 작성 요청 v1
-# curl -X POST http://localhost:8080/api/qnaboard/create
-#-H "Authorization: Bearer {your_jwt_token}"
-#-H "Content-Type: multipart/form-data"
-#-F "memberId=1"
-#-F "title=게시글 제목"
-#-F "content=게시글 내용"
-#-F "files=@/path/to/your/file1.png"
-#-F "files=@/path/to/your/file2.png"
-POST http://localhost:8080/api/qnaboard/create
-Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzcxMzEzODUsImV4cCI6MTczNzEzMjI4NSwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.w1KGueVpQiqZ3rqmgQlXVBxk_3fyGvuRHhadw85JbX5oDixPckF8sVlT9gqbMs1fjOhjLHjCSrS6ynQ4-l6keg
-Content-Type: multipart/form-data; boundary=WebAppBoundary
-
---WebAppBoundary
-Content-Disposition: form-data; name="memberId"
-
-1
---WebAppBoundary
-Content-Disposition: form-data; name="title"
-
-게시글 제목
---WebAppBoundary
-Content-Disposition: form-data; name="content"
-
-게시글 내용
---WebAppBoundary
-Content-Disposition: form-data; name="files"; filename="file1.png"
-
-< C:\Users\User\bigproject\test\file1.png
---WebAppBoundary
-###
-
 ### 첨부파일 하나 업로드 API
 # curl -X POST "http://localhost:8080/api/files/update/{fileId}"
 # -H "Content-Type: multipart/form-data"

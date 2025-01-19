@@ -22,6 +22,11 @@ public class QnaBoardService {
     }
 
     @Transactional(readOnly = true)
+    public Optional<QnaBoard> findQnaBoardByIdWithDetails(Long qnaBoardId) {
+        return qnaBoardRepository.findByIdWithDetails(qnaBoardId);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<QnaBoard> findQnaBoardById(Long qnaBoardId) {
         return qnaBoardRepository.findById(qnaBoardId);
     }

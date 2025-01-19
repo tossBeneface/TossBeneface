@@ -1,6 +1,5 @@
 package com.app.api.qnaboard.service;
 
-import com.app.api.file.service.FileUploadService;
 import com.app.api.qnaboard.dto.QnaBoardDto;
 import com.app.domain.member.entity.Member;
 import com.app.domain.member.service.MemberService;
@@ -22,7 +21,6 @@ public class QnaBoardInfoService {
 
     private final QnaBoardService qnaBoardService;
     private final MemberService memberService;
-    private final FileUploadService fileUploadService;
     private final AttachmentService attachmentService;
 
     @Transactional
@@ -49,8 +47,9 @@ public class QnaBoardInfoService {
 
     @Transactional(readOnly = true)
     public QnaBoardDto.Response getQnaBoardById(Long qnaBoardId) {
-        QnaBoard qnaBoard = qnaBoardService.findQnaBoardById(qnaBoardId)
+        QnaBoard qnaBoard = qnaBoardService.findQnaBoardByIdWithDetails(qnaBoardId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+
         return QnaBoardDto.Response.of(qnaBoard);
     }
 
