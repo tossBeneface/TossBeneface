@@ -31,7 +31,7 @@ public class TokenController {
         AuthorizationHeaderUtils.validateAuthorization(authorizationHeader);
 
         String refreshToken = authorizationHeader.split(" ")[1];
-        AccessTokenResponseDto accessTokenResponseDto = tokenService.createAccessTokenByRefreshToken(refreshToken);
+        AccessTokenResponseDto accessTokenResponseDto = tokenService.createAccessTokenByRefreshToken(refreshToken, response);
 
         return ResponseEntity.ok(accessTokenResponseDto);
     }

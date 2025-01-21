@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class CookieService {
 
     @Value("${token.refresh-token-expiration-time}")
-    private final String refreshTokenExpirationTime;
+    private String refreshTokenExpirationTime;
 
     // HttpOnly 쿠키 생성 메서드
     public void addHttpOnlyCookie(HttpServletResponse response, String name, String value) {
