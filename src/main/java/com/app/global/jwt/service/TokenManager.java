@@ -74,6 +74,7 @@ public class TokenManager {
             .signWith(key, SignatureAlgorithm.HS512) // 수정된 부분
             .setHeaderParam("type", "JWT")
             .compact();
+        log.debug("Token Expiration: {}", expirationTime);
         return accessToken;
     }
 

@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,7 +35,7 @@ public class QnaBoard extends BaseEntity {
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "qnaBoard", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Attachment> attachments;
+    private List<Attachment> attachments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId", nullable = false)
@@ -90,12 +91,24 @@ public class QnaBoard extends BaseEntity {
     }
 
     public void addAttachment(Attachment attachment) {
+        if (attachments == null) {
+            attachments = new ArrayList<>();
+        }
         attachments.add(attachment);
         attachment.setQnaBoard(this); // 양방향 연관 관계 설정
     }
 
+    //Attachment 일괄 추가
+    public void addAttachments(List<Attachment> attachments) {
+        if (attachments != null) {
+            attachments.forEach(this::addAttachment); // addAttachment 호출
+        }
+    }
+
     public void removeAttachment(Attachment attachment) {
-        attachments.remove(attachment);
+        if (attachments != null) {
+            attachments.remove(attachment);
+        }
         attachment.setQnaBoard(null); // 연관 관계 해제
     }
 

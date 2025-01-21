@@ -27,6 +27,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         // 1. Authorization Header 검증
         String authorizationHeader = request.getHeader("Authorization");
+        log.info("Authorization Header: {}", authorizationHeader);
         AuthorizationHeaderUtils.validateAuthorization(authorizationHeader);
 
         // 2. TOKEN 검증
@@ -39,7 +40,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if (!TokenType.isAccessToken(tokenType)) {
             throw new AuthenticationException(ErrorCode.NOT_ACCESS_TOKEN_TYPE);
         }
-
+        log.debug("Received JWT Token: {}", token);
+        log.debug("Parsed Claims: {}", tokenClaims);
         log.info("토큰 유효성 검사 완료");
         return true;
     }
