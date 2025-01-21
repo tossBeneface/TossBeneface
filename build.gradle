@@ -112,18 +112,3 @@ clean {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-//// compileQuerydsl 태스크가 이미 존재하는지 확인 후 등록
-//if (!tasks.names.contains("compileQuerydsl")) {
-//	tasks.register("compileQuerydsl", JavaCompile) {
-//		group = "build"
-//		description = "Compile Querydsl Q-types"
-//		classpath = sourceSets.main.get().runtimeClasspath
-//		source = sourceSets.main.get().java.srcDirs
-//		options.annotationProcessorPath = configurations.annotationProcessor
-//	}
-//
-//	// compileJava 태스크에 compileQuerydsl 추가
-//	tasks.named("compileJava") {
-//		dependsOn tasks.named("compileQuerydsl")
-//	}
-//}

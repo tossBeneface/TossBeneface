@@ -3,7 +3,7 @@ package com.app.global.resolver.memberInfo;
 import com.app.domain.member.constant.Role;
 import com.app.global.jwt.service.TokenManager;
 import io.jsonwebtoken.Claims;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
