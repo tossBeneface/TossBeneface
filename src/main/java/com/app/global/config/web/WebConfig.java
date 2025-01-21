@@ -1,11 +1,14 @@
 package com.app.global.config.web;
 
+import com.app.global.filter.JakartaCompatibleXssEscapeServletFilter;
 import com.app.global.interceptor.AdminAuthorizationInterceptor;
 import com.app.global.interceptor.AuthenticationInterceptor;
 import com.app.global.resolver.memberInfo.MemberInfoArgumentResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -67,6 +70,15 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(memberInfoArgumentResolver);
+    }
+
+    @Bean
+    public FilterRegistrationBean<JakartaCompatibleXssEscapeServletFilter> filterRegistrationBean() {
+        FilterRegistrationBean<JakartaCompatibleXssEscapeServletFilter> filterRegistration = new FilterRegistrationBean<>();
+        filterRegistration.setFilter(new JakartaCompatibleXssEscapeServletFilter(new XssEscapeServletFilter()));
+        filterRegistration.setOrder(1);
+        filterRegistration.addUrlPatterns("/*");
+        return filterRegistration;
     }
 
     @Override
