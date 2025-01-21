@@ -5,12 +5,15 @@ import com.app.domain.member.service.MemberService;
 import com.app.global.error.ErrorCode;
 import com.app.global.error.exception.AuthenticationException;
 import com.app.global.jwt.constant.TokenType;
+import com.app.global.jwt.service.CookieService;
 import com.app.global.jwt.service.TokenManager;
 import io.jsonwebtoken.Claims;
-import java.time.LocalDateTime;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -19,8 +22,9 @@ public class LogoutService {
 
     private final MemberService memberService;
     private final TokenManager tokenManager;
+    private final CookieService cookieService;
 
-    public void logout(String accessToken) {
+    public void logout(String accessToken, HttpServletResponse response) {
 
         tokenManager.validateToken(accessToken);
         Claims tokenClaims = tokenManager.getTokenClaims(accessToken);
@@ -33,5 +37,6 @@ public class LogoutService {
         Member member = memberService.findMemberById(memberId);
         member.expireRefreshToken(LocalDateTime.now());
 
+        cookieService.removeCookie(response, "refreshToken");
     }
 }
