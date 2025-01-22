@@ -2,10 +2,12 @@ package com.app.api.token.controller;
 
 import com.app.api.token.dto.AccessTokenResponseDto;
 import com.app.api.token.service.TokenService;
+import com.app.global.jwt.service.CookieService;
 import com.app.global.util.AuthorizationHeaderUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,16 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 
     private final TokenService tokenService;
+    private final CookieService cookieService;
 
     @Tag(name = "authentication")
     @Operation(summary = "Access Token 재발급 API", description = "Access Token 재발급 API")
     @PostMapping("/access-token/issue")
-    public ResponseEntity<AccessTokenResponseDto> createAccessToken(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<AccessTokenResponseDto> createAccessToken(HttpServletRequest httpServletRequest, HttpServletResponse response) {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
         AuthorizationHeaderUtils.validateAuthorization(authorizationHeader);
 
         String refreshToken = authorizationHeader.split(" ")[1];
-        AccessTokenResponseDto accessTokenResponseDto = tokenService.createAccessTokenByRefreshToken(refreshToken);
+        AccessTokenResponseDto accessTokenResponseDto = tokenService.createAccessTokenByRefreshToken(refreshToken, response);
 
         return ResponseEntity.ok(accessTokenResponseDto);
     }

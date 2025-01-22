@@ -3,6 +3,7 @@ package com.app.api.login.service;
 import com.app.api.login.dto.JoinDto;
 import com.app.api.login.dto.LoginDto;
 import com.app.api.login.validator.LoginValidator;
+import com.app.api.token.service.TokenService;
 import com.app.domain.member.constant.Gender;
 import com.app.domain.member.constant.MemberStatus;
 import com.app.domain.member.constant.Role;
@@ -13,6 +14,7 @@ import com.app.global.error.ErrorCode;
 import com.app.global.error.exception.BusinessException;
 import com.app.global.jwt.dto.JwtTokenDto;
 import com.app.global.jwt.service.TokenManager;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +34,7 @@ public class LoginService {
     private final TokenManager tokenManager;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MemberRepository memberRepository;
+    private final TokenService tokenService;
 
     public JoinDto.Response join(JoinDto.Request request) {
 
@@ -61,7 +64,7 @@ public class LoginService {
 
     }
 
-    public LoginDto.Response login(LoginDto.Request request) {
+    public LoginDto.Response login(LoginDto.Request request, HttpServletResponse httpServletResponse) {
         JwtTokenDto jwtTokenDto;
 
         Member member = memberRepository.findByEmail(request.getEmail())
@@ -83,6 +86,7 @@ public class LoginService {
             response.setGender(member.getGender().toString());
             response.setRole(member.getRole().toString());
             log.info("userInfo : {}", member);
+
             return response;
         } else {
             throw new BusinessException(ErrorCode.INVALID_PASSWORD);

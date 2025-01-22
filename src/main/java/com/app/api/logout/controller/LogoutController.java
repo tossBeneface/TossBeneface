@@ -5,6 +5,7 @@ import com.app.global.util.AuthorizationHeaderUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +23,12 @@ public class LogoutController {
     @Tag(name = "authentication")
     @Operation(summary = "로그아웃 API", description = "로그아웃 시 refresh token 만료 처리")
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<String> logout(HttpServletRequest httpServletRequest, HttpServletResponse response) {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
         AuthorizationHeaderUtils.validateAuthorization(authorizationHeader);
         String accessToken = authorizationHeader.split(" ")[1];
 
-        logoutService.logout(accessToken);
+        logoutService.logout(accessToken, response);
 
         return ResponseEntity.ok("logout success");
     }
