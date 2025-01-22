@@ -79,6 +79,10 @@ dependencies {
 	// H2 Database for testing
 	runtimeOnly 'com.h2database:h2'
 
+	// Mysql
+	implementation 'mysql:mysql-connector-java:8.0.33' // 최신 버전을 확인 후 사용
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }

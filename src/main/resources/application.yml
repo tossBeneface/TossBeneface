@@ -7,18 +7,13 @@ server:
     max-http-form-post-size: 20971520
 
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  # todo 개발 데이터베이스 연결
   datasource:
-    url: jdbc:h2:file:./data/testdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-
+    url: jdbc:mysql://localhost:3306/toss_beneface
+    username: toss_beneface_user
+    password: ai0310
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
