@@ -38,3 +38,12 @@ Content-Type: application/json
   "password": "password123"
 }
 ```
+###
+### mysql db 설정
+```
+CREATE DATABASE toss_beneface;
+CREATE USER 'toss_beneface_user'@'localhost' IDENTIFIED BY 'ai0310';
+CREATE USER 'toss_beneface_user'@'%' IDENTIFIED BY 'ai0310';
+GRANT ALL PRIVILEGES ON toss_beneface.* TO 'toss_beneface_user'@'localhost';
+GRANT ALL PRIVILEGES ON toss_beneface.* TO 'toss_beneface_user'@'%';
+```
