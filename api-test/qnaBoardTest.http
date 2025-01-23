@@ -11,7 +11,7 @@ Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1M
 #-F 'files=@C:/path/to/your/file2.png'
 ### 게시글 작성
 POST http://localhost:8080/api/qnaboard/create
-Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzcyNjM0NzksImV4cCI6MTczNzI2NDM3OSwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.XlD-3cbfwClX_aJWwT7k7vqiuVTnalrG--6gnnO6MGeoiFgJe4ogXCi7-AV8ZjmOE5lcZzSuR3ZRgWklfWadaw
+Authorization: Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3Mzc1OTM1OTksImV4cCI6MTczNzU5NDQ5OSwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.9NRHm4uKBH1QWdux9Y3kXgI1AZlwhxswiqncsAV2bEEpAdjcbFsV4r5WIm6HGxmGbHfTGDhzALGbwiF58PW89Q
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
