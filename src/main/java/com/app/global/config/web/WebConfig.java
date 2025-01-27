@@ -35,7 +35,7 @@ public class WebConfig implements WebMvcConfigurer {
                 "/api/login", "/api/login/**",
                 "/h2-console/**",
                 "/api/access-token/issue", "/api/access-token/issue/**",
-                "/api/health", "/api/card-benefits",
+                "/api/health", "/api/card-benefits", "/api/flow",
                     "/api/card-benefits/**",
                     "/api/qnaboard/test");
         registry.addInterceptor(adminAuthorizationInterceptor)
