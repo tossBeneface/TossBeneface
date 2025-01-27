@@ -31,7 +31,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(authenticationInterceptor)
             .order(1) // 인증 인터셉터가 가장 먼저 동작하도록 설정
             .addPathPatterns("/api/**")
-            .excludePathPatterns("/api/join", "/api/join/**",
+            .excludePathPatterns( "/swagger-ui/**", // Swagger UI
+                    "/v3/api-docs/**", // OpenAPI 문서
+                    "/api/join", "/api/join/**",
                 "/api/login", "/api/login/**",
                 "/h2-console/**",
                 "/api/access-token/issue", "/api/access-token/issue/**",
