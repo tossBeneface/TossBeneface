@@ -1,6 +1,7 @@
 package com.app.domain.qnaboard.service;
 
 import com.app.api.qnaboard.dto.QnaBoardDto;
+import com.app.domain.qnaboard.constant.ContentStatus;
 import com.app.domain.qnaboard.entity.Attachment;
 import com.app.domain.qnaboard.entity.QnaBoard;
 import com.app.domain.qnaboard.repository.QnaBoardRepository;
@@ -52,6 +53,6 @@ public class QnaBoardService {
 
     @Transactional
     public void deleteQnaBoard(QnaBoard qnaBoard) {
-        qnaBoardRepository.delete(qnaBoard);
+        qnaBoard.changeStatus(ContentStatus.DEACTIVATE);
     }
 }

@@ -3,7 +3,10 @@ package com.app.global.util;
 import com.app.global.error.ErrorCode;
 import com.app.global.error.exception.AuthenticationException;
 import com.app.global.jwt.constant.GrantType;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class AuthorizationHeaderUtils {
 
@@ -18,6 +21,23 @@ public class AuthorizationHeaderUtils {
         if (authorizations.length < 2 || (!GrantType.BEARER.getType().equals(authorizations[0]))) {
             throw new AuthenticationException(ErrorCode.NOT_VALID_BEARER_GRANT_TYPE);
         }
+    }
+
+    /**
+     * HttpServletRequest에서 Authorization 헤더 추출
+     */
+    public static String extractAuthorizationHeader() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes == null) {
+            throw new AuthenticationException(ErrorCode.NOT_EXISTS_AUTHORIZATION);
+        }
+
+        HttpServletRequest request = attributes.getRequest();
+        String authorizationHeader = request.getHeader("Authorization");
+        if (!StringUtils.hasText(authorizationHeader)) {
+            throw new AuthenticationException(ErrorCode.NOT_EXISTS_AUTHORIZATION);
+        }
+        return authorizationHeader;
     }
 
 }

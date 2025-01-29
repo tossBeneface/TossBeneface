@@ -2,6 +2,7 @@ package com.app.global.resolver.memberInfo;
 
 import com.app.domain.member.constant.Role;
 import com.app.global.jwt.service.TokenManager;
+import com.app.global.util.JwtUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class MemberInfoArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final TokenManager tokenManager;
+    private final JwtUtils jwtUtils;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -32,7 +34,7 @@ public class MemberInfoArgumentResolver implements HandlerMethodArgumentResolver
         String authorizationHeader = request.getHeader("Authorization");
         String token = authorizationHeader.split(" ")[1];
 
-        Claims tokenClaims = tokenManager.getTokenClaims(token);
+        Claims tokenClaims = jwtUtils.getTokenClaims(token);
         Long memberId = Long.valueOf((Integer) tokenClaims.get("memberId"));
         String role = (String) tokenClaims.get("role");
 
