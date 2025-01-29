@@ -30,6 +30,7 @@ public class LogoutController {
 
         logoutService.logout(accessToken, response);
 
-        return ResponseEntity.ok("logout success");
+        // 204 No Content를 사용하는 것이 RESTful API 설계에 부합
+        return ResponseEntity.noContent().build();
     }
 }

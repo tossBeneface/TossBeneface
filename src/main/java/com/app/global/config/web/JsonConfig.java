@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.HtmlUtils;
@@ -27,6 +28,7 @@ public class JsonConfig {
             }
         });
         objectMapper.registerModule(module);
+        objectMapper.registerModule(new JavaTimeModule());
         return objectMapper;
     }
 

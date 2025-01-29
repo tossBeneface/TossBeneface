@@ -4,6 +4,7 @@ import com.app.global.filter.LoggingFilter;
 import com.app.global.interceptor.AdminAuthorizationInterceptor;
 import com.app.global.interceptor.AuthenticationInterceptor;
 import com.app.global.jwt.service.TokenManager;
+import com.app.global.util.JwtUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final TokenManager tokenManager;
+    private final JwtUtils jwtUtils;
 
     @Value("${token.access-token-expiration-time}")
     private String accessTokenExpirationTime;
@@ -45,14 +47,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationInterceptor authenticationInterceptor(TokenManager tokenManager) {
+    public AuthenticationInterceptor authenticationInterceptor() {
         log.info("AuthenticationInterceptor 빈 생성");
-        return new AuthenticationInterceptor(tokenManager);
+        return new AuthenticationInterceptor(jwtUtils);
     }
 
     @Bean
     public AdminAuthorizationInterceptor adminAuthorizationInterceptor() {
-        return new AdminAuthorizationInterceptor(tokenManager);
+        return new AdminAuthorizationInterceptor(tokenManager, jwtUtils);
     }
 
     @Bean

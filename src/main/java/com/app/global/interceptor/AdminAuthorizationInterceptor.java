@@ -4,6 +4,7 @@ import com.app.domain.member.constant.Role;
 import com.app.global.error.ErrorCode;
 import com.app.global.error.exception.AuthenticationException;
 import com.app.global.jwt.service.TokenManager;
+import com.app.global.util.JwtUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class AdminAuthorizationInterceptor implements HandlerInterceptor {
 
     private final TokenManager tokenManager;
+    private final JwtUtils jwtUtils;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -24,7 +26,7 @@ public class AdminAuthorizationInterceptor implements HandlerInterceptor {
         String authorizationHeader = request.getHeader("Authorization");
         String accessToken = authorizationHeader.split(" ")[1];
 
-        Claims tokenClaims = tokenManager.getTokenClaims(accessToken);
+        Claims tokenClaims = jwtUtils.getTokenClaims(accessToken);
         String role = (String) tokenClaims.get("role");
 
         if (!Role.ADMIN.equals(Role.valueOf(role))) {

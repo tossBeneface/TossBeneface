@@ -3,7 +3,6 @@ package com.app.api.login.service;
 import com.app.api.login.dto.JoinDto;
 import com.app.api.login.dto.LoginDto;
 import com.app.api.login.validator.LoginValidator;
-import com.app.api.token.service.TokenService;
 import com.app.domain.member.constant.Gender;
 import com.app.domain.member.constant.MemberStatus;
 import com.app.domain.member.constant.Role;
@@ -34,9 +33,8 @@ public class LoginService {
     private final TokenManager tokenManager;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MemberRepository memberRepository;
-    private final TokenService tokenService;
 
-    public JoinDto.Response join(JoinDto.Request request) {
+    public JoinDto.Response join(JoinDto.Request request, HttpServletResponse httpServletResponse) {
 
         JwtTokenDto jwtTokenDto;
 
@@ -56,7 +54,7 @@ public class LoginService {
                 .build();
 
         member = memberService.registerMember(member);
-        jwtTokenDto = tokenManager.createJwtTokenDto(member.getMemberId(), member.getRole());
+        jwtTokenDto = tokenManager.createJwtTokenDto(member.getMemberId(), member.getRole(), httpServletResponse);
         log.info("memberInfo : {}", member);
         member.updateRefreshToken(jwtTokenDto);
 
@@ -71,7 +69,7 @@ public class LoginService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_EMAIL));
 
         if (bCryptPasswordEncoder.matches(request.getPassword(), member.getPassword())) {
-            jwtTokenDto = tokenManager.createJwtTokenDto(member.getMemberId(), member.getRole());
+            jwtTokenDto = tokenManager.createJwtTokenDto(member.getMemberId(), member.getRole(), httpServletResponse);
             member.updateRefreshToken(jwtTokenDto);
             LoginDto.Response response = LoginDto.Response.of(jwtTokenDto);
             response.setEmail(member.getEmail());

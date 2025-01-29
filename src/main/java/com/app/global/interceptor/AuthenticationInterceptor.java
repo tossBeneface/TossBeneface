@@ -3,8 +3,8 @@ package com.app.global.interceptor;
 import com.app.global.error.ErrorCode;
 import com.app.global.error.exception.AuthenticationException;
 import com.app.global.jwt.constant.TokenType;
-import com.app.global.jwt.service.TokenManager;
 import com.app.global.util.AuthorizationHeaderUtils;
+import com.app.global.util.JwtUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Slf4j
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
-    private final TokenManager tokenManager;
+    private final JwtUtils jwtUtils;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -32,10 +32,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         // 2. TOKEN 검증
         String token = authorizationHeader.split(" ")[1];
-        tokenManager.validateToken(token);
+        jwtUtils.validateToken(token);
 
         // 3. TOKEN TYPE 검증
-        Claims tokenClaims = tokenManager.getTokenClaims(token);
+        Claims tokenClaims = jwtUtils.getTokenClaims(token);
         String tokenType = tokenClaims.getSubject();
         if (!TokenType.isAccessToken(tokenType)) {
             throw new AuthenticationException(ErrorCode.NOT_ACCESS_TOKEN_TYPE);

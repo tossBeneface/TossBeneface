@@ -60,7 +60,8 @@ public class WebConfig implements WebMvcConfigurer {
                 HttpMethod.PATCH.name(),
                 HttpMethod.DELETE.name(),
                 HttpMethod.OPTIONS.name()
-            ).allowedHeaders("Content-Type", "Authorization", "Accept");
+            ).allowedHeaders("Content-Type", "Authorization", "Accept")
+           .allowCredentials(true); // 쿠키 허용;
     }
 
     @Override

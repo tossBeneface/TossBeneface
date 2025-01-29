@@ -2,10 +2,12 @@ package com.app.api.qnaboard.controller;
 
 import com.app.api.qnaboard.dto.QnaBoardDto;
 import com.app.api.qnaboard.service.QnaBoardInfoService;
+import com.app.global.util.JsonUtils;
 import com.app.global.util.MultipartRequestParserUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,18 +31,29 @@ public class QnaBoardController {
     @Tag(name = "qnaboard")
     @Operation(summary = "게시글 작성 API", description = "로그인 해서 받은 accessToken을 포함해 request, 파일 업로드 되게 하려면 컨트롤러 수정해야 - postman에서는 파일업로드 테스트 가능")
     @PostMapping("/create")
-    public ResponseEntity<Long> createQnaBoard(MultipartHttpServletRequest request) {
+    public ResponseEntity<Long> createQnaBoard(@RequestPart("requestDto") String requestDtoJson, // JSON 문자열로 받음
+                                               @RequestPart(value = "files", required = false) List<MultipartFile> files
+                                               ) {
+        try {
+            System.out.println("Request DTO JSON: " + requestDtoJson);
+            System.out.println("Files: " + (files != null ? files.size() : "No files"));
 
-        // JSON 데이터 파싱
-        QnaBoardDto.Request requestDto = MultipartRequestParserUtils.parseJson(request, "requestDto", QnaBoardDto.Request.class);
+            // JSON 문자열을 QnaBoardDto.Request 객체로 변환 (JsonUtils 사용)
+            JsonUtils jsonUtils = new JsonUtils();
+            QnaBoardDto.Request requestDto = jsonUtils.deserialize(requestDtoJson, QnaBoardDto.Request.class);
 
-        // 파일 데이터 파싱
-        List<MultipartFile> files = MultipartRequestParserUtils.parseFiles(request, "files");
-        requestDto.setFiles(files);
+            // 파일 데이터가 존재하면 requestDto에 설정
+            if (files != null) {
+                requestDto.setFiles(files);
+            }
 
-        // 서비스 호출
-        Long qnaBoardId = qnaBoardInfoService.createQnaBoard(requestDto);
-        return ResponseEntity.ok(qnaBoardId);
+            // 게시글 생성 서비스 호출
+            Long qnaBoardId = qnaBoardInfoService.createQnaBoard(requestDto);
+            return ResponseEntity.ok(qnaBoardId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @Tag(name = "qnaboard")

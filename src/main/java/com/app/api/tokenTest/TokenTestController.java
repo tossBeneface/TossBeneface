@@ -3,14 +3,17 @@ package com.app.api.tokenTest;
 import com.app.domain.member.constant.Role;
 import com.app.global.jwt.dto.JwtTokenDto;
 import com.app.global.jwt.service.TokenManager;
+import com.app.global.util.JwtUtils;
 import io.jsonwebtoken.Claims;
-import java.util.Date;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 @Slf4j
 @RestController
@@ -19,18 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenTestController {
 
     private final TokenManager tokenManager;
+    private final JwtUtils jwtUtils;
 
     // 토큰이 잘 생성되는지 확인
     @GetMapping("/create")
-    public JwtTokenDto createJwtTokenDto() {
-        return tokenManager.createJwtTokenDto(1L, Role.ADMIN);
+    public JwtTokenDto createJwtTokenDto(HttpServletResponse httpServletResponse) {
+        return tokenManager.createJwtTokenDto(1L, Role.ADMIN, httpServletResponse);
     }
 
     // 입력받은 토큰이 유효한지 확인
     @GetMapping("/valid")
     public String validateJwtToken(@RequestParam String token) {
-        tokenManager.validateToken(token);
-        Claims tokenClaims = tokenManager.getTokenClaims(token);
+        jwtUtils.validateToken(token);
+        Claims tokenClaims = jwtUtils.getTokenClaims(token);
         String subject = tokenClaims.getSubject();
         Date issuedAt = tokenClaims.getIssuedAt();
         Date expiration = tokenClaims.getExpiration();
