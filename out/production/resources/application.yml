@@ -1,0 +1,72 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+  tomcat:
+    max-http-form-post-size: 20971520
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  # todo 개발 데이터베이스 연결
+  datasource:
+    url: jdbc:h2:file:./data/testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 500 # 일대다 컬렉션 조회 시 in절 사용
+    open-in-view: false # 영속성 컨텍스트의 생존 범위를 트랜잭션 범위로 한정 -> 컨트롤러에서 지연로딩으로 연관된 엔티티 가져오려고 하면 에러 발생
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    org.hibernate.type: trace
+    org.springframework.security: DEBUG
+    com.app: DEBUG
+    com.app.global.interceptor: DEBUG
+    com.app.global.jwt.service: DEBUG
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+token:
+  secret: ENC(NhiNrYxqLjQazS5r7fsuWewxj+0tyjzDqBXaYRGNJlBz9uC4ANMy4KgSnLPUQz3tspY3DRM+JOHJej3pt9rv889oNml29Adpj5tyy+krjcFNneThcIK4FMTus7CdE4AzcAZGzf2erd8=) # 임의의 문자열, 단 Base64 88문자 이상이어야
+  access-token-expiration-time: 900000 # 15분 1000(ms) x 60(s) x 15(m)
+  refresh-token-expiration-time: 1209600000 # 2주 1000(ms) x 60 (s) x 60(m) x 24(h) x 14(d)
+
+# 암호화해서 가져가고 싶은 내용 넣기
+jasypt:
+  password: ${PASSWORD}
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIA47GB7YGCHNK5IMEM
+      secretKey: ENC(/GXm6N9N4I4tA4/McUHWeexBUVel2LzZjKc5ahr7cavstjxEZl8pWCxYhn502j16z5dnYNcbB6o=)
+    region:
+      static: ap-southeast-2 # AWS 리전

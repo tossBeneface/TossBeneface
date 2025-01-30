@@ -45,4 +45,8 @@ public class CardBenefitEntity {
 
     @Column
     private int monthly;
+
+    // 새로운 shop 필드 추가
+    @Column
+    private String shop;
 }
