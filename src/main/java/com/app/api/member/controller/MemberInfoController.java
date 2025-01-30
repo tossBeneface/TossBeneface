@@ -37,16 +37,5 @@ public class MemberInfoController {
 
         return ResponseEntity.ok(memberInfoResponseDto);
     }
-    /*
-    public ResponseEntity<MemberInfoResponseDto> getMemberInfo(
-        @RequestHeader("Authorization") String authorizationHeader
-    ) {
-        String accessToken = authorizationHeader.split(" ")[1];
-        Claims tokenClaims = tokenManager.getTokenClaims(accessToken);
-        Long memberId = Long.valueOf((Integer) tokenClaims.get("memberId"));
-        MemberInfoResponseDto memberInfoResponseDto = memberInfoService.getMemberInfo(memberId);
-
-        return ResponseEntity.ok(memberInfoResponseDto);
-    }*/
 
 }

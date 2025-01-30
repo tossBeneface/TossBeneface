@@ -12,10 +12,10 @@ public class LoginDto {
 
     @Getter @Setter
     public static class Request {
-        @Schema(description = "이메일", example = "a061283@aivle.kt.co.kr", required = true)
+        @Schema(description = "이메일", example = "test@example.com", required = true)
         private String email;
 
-        @Schema(description = "비밀번호", example = "비밀번호 정책 설명", required = true)
+        @Schema(description = "비밀번호", example = "password123", required = true)
         private String password;
 
     }

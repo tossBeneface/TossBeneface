@@ -4,10 +4,12 @@ import com.app.api.qnaboard.dto.QnaBoardDto;
 import com.app.domain.member.entity.Member;
 import com.app.domain.member.service.MemberService;
 import com.app.domain.qnaboard.constant.ContentStatus;
-import com.app.domain.qnaboard.entity.QnaBoard;
 import com.app.domain.qnaboard.entity.Attachment;
+import com.app.domain.qnaboard.entity.QnaBoard;
 import com.app.domain.qnaboard.service.AttachmentService;
 import com.app.domain.qnaboard.service.QnaBoardService;
+import com.app.global.util.AuthorizationHeaderUtils;
+import com.app.global.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +26,19 @@ public class QnaBoardInfoService {
     private final QnaBoardService qnaBoardService;
     private final MemberService memberService;
     private final AttachmentService attachmentService;
+    private final JwtUtils jwtUtils;
 
     @Transactional
     public Long createQnaBoard(QnaBoardDto.Request requestDto) {
-        Member member = memberService.findMemberById(requestDto.getMemberId());
+        // Authorization 헤더 추출 및 검증
+        String authorizationHeader = AuthorizationHeaderUtils.extractAuthorizationHeader();
+        AuthorizationHeaderUtils.validateAuthorization(authorizationHeader);
+
+        // JWT 토큰에서 memberId 추출
+        String token = authorizationHeader.replace("Bearer ", "");
+        Long memberId = jwtUtils.extractMemberIdFromToken(token);
+
+        Member member = memberService.findMemberById(memberId);
 
         /// 첨부파일 없이 QnaBoard 저장
         QnaBoard qnaBoard = QnaBoard.builder()
@@ -98,9 +109,8 @@ public class QnaBoardInfoService {
         return qnaBoard.getQnaBoardId();
     }
 
-
-    // 잘 처리됐다 라는 response를 돌려줘야 (공통 response작성)
     public void deleteQnaBoard(Long qnaBoardId) {
-        // status처리
+        QnaBoard qnaBoard = qnaBoardService.findQnaBoardWithDetails(qnaBoardId);
+        qnaBoardService.deleteQnaBoard(qnaBoard);
     }
 }
