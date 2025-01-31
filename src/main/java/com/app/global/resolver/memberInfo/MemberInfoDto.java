@@ -9,6 +9,8 @@ import lombok.Getter;
 public class MemberInfoDto {
 
     private Long memberId;
+    private String memberName;
+    private String email;
     private Role role;
 
 }

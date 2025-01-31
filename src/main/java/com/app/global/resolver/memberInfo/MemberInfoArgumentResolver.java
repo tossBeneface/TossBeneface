@@ -27,18 +27,37 @@ public class MemberInfoArgumentResolver implements HandlerMethodArgumentResolver
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String authorizationHeader = request.getHeader("Authorization");
-        String token = authorizationHeader.split(" ")[1];
 
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid Authorization header format");
+        }
+
+        String token = authorizationHeader.split(" ")[1];
         Claims tokenClaims = tokenManager.getTokenClaims(token);
-        Long memberId = Long.valueOf((Integer) tokenClaims.get("memberId"));
+
+        Long memberId = tokenClaims.containsKey("memberId") ? ((Number) tokenClaims.get("memberId")).longValue() : null;
         String role = (String) tokenClaims.get("role");
 
+        if (memberId == null || role == null) {
+            throw new IllegalArgumentException("Missing token claims");
+        }
+
+        // role 값이 null이면 예외 처리
+        Role userRole = null;
+        try {
+            userRole = Role.from(role);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid role value: " + role);
+        }
+
         return MemberInfoDto.builder()
-            .memberId(memberId)
-            .role(Role.from(role))
-            .build();
+                .memberId(memberId)
+                .role(userRole)
+                .build();
     }
+
 }

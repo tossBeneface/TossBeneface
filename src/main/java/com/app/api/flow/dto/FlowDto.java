@@ -1,6 +1,5 @@
 package com.app.api.flow.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FlowResponse {
+public class FlowDto {
 
     private String storeGenderScript;
 

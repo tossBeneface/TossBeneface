@@ -1,6 +1,6 @@
 package com.app.api.flow.service;
 
-import com.app.api.flow.dto.FlowResponse;
+import com.app.api.flow.dto.FlowDto;
 import com.app.api.flow.repository.FlowRepository;
 import com.app.domain.districtAnaly.entity.Flow;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +13,11 @@ public class FlowServiceImpl implements FlowService {
     private final FlowRepository flowRepository;
 
     @Transactional(readOnly = true)
-    public FlowResponse getFlow() {
+    public FlowDto getFlow() {
         Flow flow = flowRepository.findTopByOrderByCreatedAtDesc()
                 .orElseThrow(() -> new IllegalArgumentException("데이터가 존재하지 않습니다."));
 
-        return FlowResponse.builder()
+        return FlowDto.builder()
                 .storeGenderScript(flow.getStoreAgeScript())
                 .storeAgeScript(flow.getStoreAgeScript())
                 .storeDayScript(flow.getStoreDayScript())

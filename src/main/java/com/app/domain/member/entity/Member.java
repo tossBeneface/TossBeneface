@@ -9,16 +9,14 @@ import com.app.domain.qnaboard.entity.QnaBoard;
 import com.app.global.jwt.dto.JwtTokenDto;
 import com.app.global.util.DateTimeUtils;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 

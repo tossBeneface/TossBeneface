@@ -1,7 +1,6 @@
 package com.app.api.flow.controller;
 
-import com.app.api.flow.dto.FlowResponse;
-import com.app.api.flow.repository.FlowRepository;
+import com.app.api.flow.dto.FlowDto;
 import com.app.api.flow.service.FlowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,9 +16,9 @@ public class FlowController {
     private final FlowService flowService;
 
     @GetMapping("/flow")
-    public ResponseEntity<FlowResponse> getFlow(
+    public ResponseEntity<FlowDto> getFlow(
     ) {
-     FlowResponse flowResponse = flowService.getFlow();
-     return ResponseEntity.status(HttpStatus.OK).body(flowResponse);
+     FlowDto flowDto = flowService.getFlow();
+     return ResponseEntity.status(HttpStatus.OK).body(flowDto);
     }
 }

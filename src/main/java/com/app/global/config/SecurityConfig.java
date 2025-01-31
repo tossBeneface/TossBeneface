@@ -63,7 +63,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // JWT방식에서는 세션이 필요 없음
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/health","/api/join", "/api/login", "/api/access-token/issue", "/h2-console/**", "/api/qnaboard/**", "/api/card-benefits", "/api/flow").permitAll() // 인증 없이 접근 허용
+                        .requestMatchers("/api/health","/api/join", "/api/login", "/api/access-token/issue", "/h2-console/**", "/api/qnaboard/**", "/api/card-benefits", "/api/flow", "/api/v1/payments/**", "http://localhost:8080/api/v1/payments/toss/success", "http://localhost:8080/api/v1/payments/toss/fail").permitAll() // 인증 없이 접근 허용
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 )
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())

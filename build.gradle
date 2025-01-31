@@ -83,6 +83,12 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.33' // 최신 버전을 확인 후 사용
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	// Json
+	implementation 'org.json:json:20210307'
+
+	// SLF4J API
+	implementation 'org.slf4j:slf4j-api:2.0.0'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }

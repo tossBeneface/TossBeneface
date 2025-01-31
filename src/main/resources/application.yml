@@ -69,3 +69,11 @@ cloud:
       secretKey: ENC(/GXm6N9N4I4tA4/McUHWeexBUVel2LzZjKc5ahr7cavstjxEZl8pWCxYhn502j16z5dnYNcbB6o=)
     region:
       static: ap-southeast-2 # AWS 리전
+
+# 토스 결제 연동
+payment:
+  toss:
+    test_client_api_key: test_ck_DpexMgkW36ya40vyX0l48GbR5ozO
+    test_secret_api_key: test_sk_GePWvyJnrKQdQ5Ey5OQ63gLzN97E
+    success_url : "http://localhost:8080/api/v1/payments/toss/success"
+    fail_url : "http://localhost:8080/api/v1/payments/toss/fail"
