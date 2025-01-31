@@ -14,21 +14,21 @@ public class FaceRegisterationEntity {
     @Column(name = "user_name", nullable = false)
     private String userName;
 
-    // 실제 이미지 데이터 (BLOB)
-    @Lob
-    @Column(name = "image_data", nullable = false)
-    private byte[] imageData;
+    // S3 업로드 후 반환되는 파일 URL (혹은 오브젝트 키)
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
 
     // 기본 생성자
-    public FaceRegisterationEntity() {}
-
-    // 생성자
-    public FaceRegisterationEntity(String userName, byte[] imageData) {
-        this.userName = userName;
-        this.imageData = imageData;
+    public FaceRegisterationEntity() {
     }
 
-    // 게터/세터
+    // 생성자
+    public FaceRegisterationEntity(String userName, String imageUrl) {
+        this.userName = userName;
+        this.imageUrl = imageUrl;
+    }
+
+    // getters, setters
     public Long getId() {
         return id;
     }
@@ -37,8 +37,8 @@ public class FaceRegisterationEntity {
         return userName;
     }
 
-    public byte[] getImageData() {
-        return imageData;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public void setId(Long id) {
@@ -49,7 +49,7 @@ public class FaceRegisterationEntity {
         this.userName = userName;
     }
 
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
