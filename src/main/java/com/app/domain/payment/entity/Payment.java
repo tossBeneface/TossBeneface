@@ -1,63 +1,28 @@
 package com.app.domain.payment.entity;
 
-import com.app.api.payment.PayType;
-import com.app.api.payment.dto.PaymentResDto;
-import com.app.domain.common.BaseEntity;
 import com.app.domain.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Setter
-@Table(indexes = {
-        @Index(name = "idx_payment_member", columnList = "customer"),
-        @Index(name = "idx_payment_paymentKey", columnList = "paymentKey"),
-})
-public class Payment extends BaseEntity {
+@Getter
+@Table(name = "payment")
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_id", nullable = false, unique = true)
-    private Long paymentId;
-    @Column(nullable = true, name = "pay_type")
-    @Enumerated(EnumType.STRING)
-    private PayType payType;
-    @Column(nullable = true, name = "pay_amount")
-    private Long amount;
-    @Column(nullable = true, name = "pay_name")
-    private String orderName;
-    @Column(nullable = true, name = "order_id")
-    private String orderId;
+    private Long id;
 
-    private boolean paySuccessYN;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer")
-    private Member customer;
-    @Column
     private String paymentKey;
-    @Column
-    private String failReason;
-
-    @Column
-    private boolean cancelYN;
-    @Column
-    private String cancelReason;
-
-    public PaymentResDto toPaymentResDto() {
-        return PaymentResDto.builder()
-                .payType(String.valueOf(payType))
-                .amount(amount)
-                .orderName(orderName)
-                .orderId(orderId)
-                .customerEmail(customer.getEmail())
-                .customerName(customer.getMemberName())
-                .cancelYN(cancelYN)
-                .failReason(failReason)
-                .build();
-    }
-
-
+    private String orderId;
+    private String orderName;
+    private String method;
+    private int totalAmount;
+    private String status;
+    private String requestedAt;
+    private String approvedAt;
+    private String receiptUrl;
+    @ManyToOne
+    private Member member;
 }

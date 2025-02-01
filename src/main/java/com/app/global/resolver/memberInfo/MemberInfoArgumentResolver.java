@@ -25,15 +25,15 @@ public class MemberInfoArgumentResolver implements HandlerMethodArgumentResolver
         return hasMemberInfoAnnotation && hasMemberInfoDto;
     }
 
+
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Invalid Authorization header format");
+            throw new IllegalArgumentException("Authorization header is missing or not in the correct format. Expected format: Bearer <token>");
         }
 
         String token = authorizationHeader.split(" ")[1];
@@ -59,5 +59,4 @@ public class MemberInfoArgumentResolver implements HandlerMethodArgumentResolver
                 .role(userRole)
                 .build();
     }
-
 }

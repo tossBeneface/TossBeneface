@@ -27,6 +27,12 @@ spring:
         write-dates-as-timestamps: false  # 날짜를 타임스탬프 형식이 아닌 ISO 8601 형식으로 직렬화
 
 
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+
+
   servlet:
     multipart:
       enabled: true
@@ -37,6 +43,12 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  web:
+    resources:
+      static-locations:
+        - classpath:/static/
+        - classpath:/public/
+        - classpath:/templates/
 
 logging:
   level:
