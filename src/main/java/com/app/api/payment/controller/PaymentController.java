@@ -1,9 +1,12 @@
 package com.app.api.payment.controller;
 
+import com.app.api.card.repository.CardRepository;
 import com.app.api.payment.service.PaymentService;
+import com.app.domain.card.entity.Card;
 import com.app.global.resolver.memberInfo.MemberInfo;
 import com.app.global.resolver.memberInfo.MemberInfoDto;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;  // org.json.JSONObject만 사용
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 public class PaymentController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -28,10 +32,7 @@ public class PaymentController {
     private static final String API_SECRET_KEY = "test_sk_GePWvyJnrKQdQ5Ey5OQ63gLzN97E";
     private final Map<String, String> billingKeyMap = new HashMap<>();
     private final PaymentService paymentService;
-
-    public PaymentController(PaymentService paymentService) {
-        this.paymentService = paymentService;
-    }
+    private final CardRepository cardRepository;
 
     @RequestMapping(value = {"/confirm/widget", "/confirm/payment"})
     public ResponseEntity<JSONObject> confirmPayment(HttpServletRequest request,
@@ -51,6 +52,7 @@ public class PaymentController {
 
         return ResponseEntity.status(statusCode).body(response);
     }
+
 
     @RequestMapping(value = "/confirm-billing")
     public ResponseEntity<JSONObject> confirmBilling(@RequestBody String jsonBody) throws Exception {

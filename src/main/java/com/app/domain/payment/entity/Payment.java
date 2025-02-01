@@ -24,5 +24,6 @@ public class Payment {
     private String approvedAt;
     private String receiptUrl;
     @ManyToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 }

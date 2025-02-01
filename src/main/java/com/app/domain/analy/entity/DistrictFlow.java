@@ -1,4 +1,4 @@
-package com.app.domain.districtAnaly.entity;
+package com.app.domain.analy.entity;
 
 import com.app.domain.common.BaseEntity;
 import jakarta.persistence.*;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Flow extends BaseEntity {
+public class DistrictFlow extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

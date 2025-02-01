@@ -6,8 +6,10 @@ import com.app.global.resolver.memberInfo.MemberInfoArgumentResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -76,6 +78,11 @@ public class WebConfig implements WebMvcConfigurer {
         // '/payment/**' URL을 'classpath:/templates/payment/' 디렉토리로 매핑
         registry.addResourceHandler("/payment/**")
                 .addResourceLocations("classpath:/templates/payment/");
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 }

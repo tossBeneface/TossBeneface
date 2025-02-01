@@ -2,7 +2,7 @@ package com.app.api.flow.service;
 
 import com.app.api.flow.dto.FlowDto;
 import com.app.api.flow.repository.FlowRepository;
-import com.app.domain.districtAnaly.entity.Flow;
+import com.app.domain.analy.entity.DistrictFlow;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ public class FlowServiceImpl implements FlowService {
 
     @Transactional(readOnly = true)
     public FlowDto getFlow() {
-        Flow flow = flowRepository.findTopByOrderByCreatedAtDesc()
+        DistrictFlow flow = flowRepository.findTopByOrderByCreatedAtDesc()
                 .orElseThrow(() -> new IllegalArgumentException("데이터가 존재하지 않습니다."));
 
         return FlowDto.builder()
