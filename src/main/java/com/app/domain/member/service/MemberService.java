@@ -57,4 +57,12 @@ public class MemberService {
         return memberRepository.findById(memberId)
             .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_EXIST));
     }
+
+    public Member getMemberByEmail(String email) {
+        return memberRepository.findByEmail(email).orElse(null);
+    }
+
+    public void updateMember(Member member) {
+        memberRepository.save(member);  // Save the updated member
+    }
 }
