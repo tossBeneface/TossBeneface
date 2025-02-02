@@ -1,6 +1,7 @@
 package com.app.api.faceRegisteration;
 
 import jakarta.persistence.*;
+import com.app.domain.member.entity.Member;
 
 @Entity
 @Table(name = "face_registration")
@@ -9,6 +10,11 @@ public class FaceRegisterationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // Member 엔티티와 외래키 관계 설정 (1명의 Member가 여러 개의 얼굴 등록 가능)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     // 사용자 이름(혹은 닉네임)
     @Column(name = "user_name", nullable = false)
@@ -23,14 +29,19 @@ public class FaceRegisterationEntity {
     }
 
     // 생성자
-    public FaceRegisterationEntity(String userName, String imageUrl) {
+    public FaceRegisterationEntity(Member member, String userName, String imageUrl) {
+        this.member = member;
         this.userName = userName;
         this.imageUrl = imageUrl;
     }
 
-    // getters, setters
+    // Getters
     public Long getId() {
         return id;
+    }
+
+    public Member getMember() {
+        return member;
     }
 
     public String getUserName() {
@@ -41,8 +52,13 @@ public class FaceRegisterationEntity {
         return imageUrl;
     }
 
+    // Setters
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public void setUserName(String userName) {

@@ -1,43 +1,53 @@
 package com.app.api.UserDataTest;
 
+import com.app.domain.common.BaseEntity;
+import com.app.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import com.app.api.CardBenefit.CardBenefitEntity;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "user_data_test")
-public class UserDataTestEntity {
+public class UserDataTestEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String cardName;
+    // Member 엔티티와 외래키 관계 설정
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false) // 외래키 컬럼 이름
+    private Member member;
 
-    @Column(nullable = false)
-    private String corp;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "card_benefit_id", nullable = false)
+    private CardBenefitEntity cardBenefit;
 
-    @Column(nullable = false)
-    private int lastMonthPerformance;
+    @Column(name = "Card", nullable = false)
+    private String card;
 
-    @Column(nullable = false)
-    private String todayDate;
+    @Column(name = "corcompany", nullable = false)
+    private String corcompany;
 
-    @Column(nullable = false)
-    private int paymentAmount;
+    @Column(name = "Last_per", nullable = false)
+    private int lastPer;
 
-    @Column(nullable = false)
-    private int benefitCount;
+    @Column(name = "date", nullable = false)
+    private String date;
 
-    @Column(nullable = false)
-    private int currentMonthPerformance;
+    @Column(name = "Pay_amount", nullable = false)
+    private int payAmount;
 
-    @Column(nullable = false)
-    private int expectedBenefitScore;
+    @Column(name = "Monthly_split", nullable = false)
+    private int monthlySplit;
 
-    @Column(nullable = false, name = "username") // 칼럼명을 "username"으로 변경
-    private String username;
+    @Column(name = "Now_per", nullable = false)
+    private int nowPer;
+
+    @Column(name = "Accrue_benefit", nullable = false)
+    private int accrueBenefit;
+
 }
