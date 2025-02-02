@@ -66,7 +66,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // JWT방식에서는 세션이 필요 없음
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers( "/swagger-ui/**", /* Swagger UI*/"/v3/api-docs/**", /*OpenAPI 문서*/
-                                "/api/health","/api/join", "/api/login", "/api/access-token/issue", "/h2-console/**", "/api/qnaboard/**", "/api/member/info", "/api/card-benefits", "/api/flow").permitAll() // 인증 없이 접근 허용
+                                "/api/health","/api/join", "/api/login", "/api/access-token/issue", "/h2-console/**",
+                                "/api/qnaboard/**", "/api/member/info", "/api/card-benefits", "/api/flow",
+                                "/api/user-data-test/**", "/api/faces/**").permitAll() // 인증 없이 접근 허용
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 )
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())
