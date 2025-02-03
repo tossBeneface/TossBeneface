@@ -6,11 +6,14 @@ import com.app.global.resolver.memberInfo.MemberInfoArgumentResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -34,13 +37,13 @@ public class WebConfig implements WebMvcConfigurer {
             .excludePathPatterns( "/swagger-ui/**", // Swagger UI
                     "/v3/api-docs/**", // OpenAPI 문서
                     "/api/join", "/api/join/**",
-                "/api/login", "/api/login/**",
-                "/h2-console/**",
-                "/api/access-token/issue", "/api/access-token/issue/**",
-                "/api/health", "/api/card-benefits","/api/faces/**",
-                    "/api/card-benefits/**",
-                    "/api/qnaboard/test", "/api/user-data-test",
-                    "/api/user-data-test/**");
+                    "/api/login", "/api/login/**",
+                    "/h2-console/**","/api/qnaboard/test",
+                    "/api/access-token/issue", "/api/access-token/issue/**",
+                    "/api/health", "/api/flow",
+                    "/api/card-benefits", "/api/card-benefits/**",
+                    "/api/user-data-test", "/api/user-data-test/**",
+                    "/api/v1/payments/**");
         registry.addInterceptor(adminAuthorizationInterceptor)
             .order(2)
             .addPathPatterns("/api/admin/**");
@@ -69,4 +72,21 @@ public class WebConfig implements WebMvcConfigurer {
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(memberInfoArgumentResolver);
     }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // '/widget/**' URL을 'classpath:/templates/widget/' 디렉토리로 매핑
+        registry.addResourceHandler("/widget/**")
+                .addResourceLocations("classpath:/templates/widget/");
+
+        // '/payment/**' URL을 'classpath:/templates/payment/' 디렉토리로 매핑
+        registry.addResourceHandler("/payment/**")
+                .addResourceLocations("classpath:/templates/payment/");
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
 }
