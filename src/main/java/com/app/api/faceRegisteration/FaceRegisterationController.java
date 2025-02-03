@@ -21,40 +21,36 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FaceRegisterationController {
 
-    private final FileUploadService fileUploadService;           // S3 업로드/삭제 로직 재사용
-    private final FaceRegisterationRepository faceRegisterationRepository;  // DB 접근
-    private final MemberRepository memberRepository;  // Member 테이블 접근
+    private final FileUploadService fileUploadService;  // S3 업로드/삭제 로직 재사용
+    private final FaceRegisterationRepository faceRegisterationRepository; // DB 접근
+    private final MemberRepository memberRepository; // Member 테이블 접근
 
     /**
-     * 얼굴 데이터 업로드
-     * @param memberId 회원 ID
-     * @param userName 사용자 이름
-     * @param file 업로드 파일
-     * @return 저장된 얼굴 데이터
+     * 1) S3에 파일 업로드 → URL 획득
+     * 2) DB 저장 (member_id 포함)
      */
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFace(
             @RequestParam("memberId") Long memberId,
-            @RequestParam("userName") String userName,
             @RequestParam("file") MultipartFile file
     ) {
         try {
-            // 1) 회원 조회
+            // 1) memberId를 통해 회원 조회
             Member member = memberRepository.findById(memberId)
                     .orElseThrow(() -> new IllegalArgumentException("해당 memberId(" + memberId + ")를 찾을 수 없습니다."));
 
-            // 2) 파일 업로드
+            // 2) S3에 업로드하고 URL 획득
             String imageUrl = fileUploadService.uploadFile(file);
 
-            // 3) FaceRegisterationEntity 저장
-            FaceRegisterationEntity entity = new FaceRegisterationEntity(member, userName, imageUrl);
+            // 3) DB 저장 (✅ userName 제거)
+            FaceRegisterationEntity entity = new FaceRegisterationEntity(member, imageUrl);
             FaceRegisterationEntity savedEntity = faceRegisterationRepository.save(entity);
 
-            // 4) **DTO**로 변환해서 응답 (Lazy 로딩 문제 방지)
-            return ResponseEntity.ok(new FaceRegisterationDTO(savedEntity));
+            return ResponseEntity.ok(savedEntity);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("업로드 실패: " + e.getMessage());
         }
@@ -67,6 +63,7 @@ public class FaceRegisterationController {
     public ResponseEntity<List<FaceRegisterationDTO>> getFacesByMember(@PathVariable Long memberId) {
         List<FaceRegisterationEntity> entities = faceRegisterationRepository.findByMember_MemberId(memberId);
 
+        // 🔹 Entity 리스트 -> DTO 리스트 변환
         List<FaceRegisterationDTO> dtos = entities.stream()
                 .map(FaceRegisterationDTO::new)
                 .collect(Collectors.toList());
@@ -75,21 +72,7 @@ public class FaceRegisterationController {
     }
 
     /**
-     * 사용자 이름(userName)으로 얼굴 데이터 조회
-     */
-    @GetMapping("/username/{userName}")
-    public ResponseEntity<List<FaceRegisterationDTO>> getFacesByUserName(@PathVariable String userName) {
-        List<FaceRegisterationEntity> entities = faceRegisterationRepository.findByUserName(userName);
-
-        List<FaceRegisterationDTO> dtos = entities.stream()
-                .map(FaceRegisterationDTO::new)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(dtos);
-    }
-
-    /**
-     * 모든 얼굴 데이터 조회
+     * DB에 있는 모든 얼굴 정보 조회
      */
     @GetMapping("/all")
     public ResponseEntity<List<FaceRegisterationDTO>> getAllFaces() {
@@ -103,42 +86,45 @@ public class FaceRegisterationController {
     }
 
     /**
-     * 특정 ID로 얼굴 데이터 조회
+     * 특정 ID로 얼굴 데이터 단건 조회
      */
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getFaceById(@PathVariable Long id) {
         try {
             FaceRegisterationEntity entity = faceRegisterationRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("해당 ID(" + id + ")를 찾을 수 없습니다."));
+
             return ResponseEntity.ok(entity);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("조회 실패: " + e.getMessage());
         }
     }
 
     /**
-     * 특정 ID로 얼굴 데이터 삭제
+     * 특정 ID로 얼굴 데이터 삭제 (S3 & DB)
      */
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteFace(@PathVariable Long id) {
         try {
-            // DB에서 엔티티 조회
+            // 1) DB에서 엔티티 조회
             FaceRegisterationEntity entity = faceRegisterationRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("해당 ID(" + id + ")를 찾을 수 없습니다."));
 
-            // S3에서 삭제
+            // 2) S3에서 삭제
             fileUploadService.deleteFileFromS3(entity.getImageUrl());
 
-            // DB에서 삭제
+            // 3) DB에서 삭제
             faceRegisterationRepository.delete(entity);
 
             return ResponseEntity.noContent().build(); // 204
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("삭제 실패: " + e.getMessage());
         }

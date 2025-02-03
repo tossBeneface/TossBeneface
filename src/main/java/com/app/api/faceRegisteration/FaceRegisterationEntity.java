@@ -1,5 +1,6 @@
 package com.app.api.faceRegisteration;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import com.app.domain.member.entity.Member;
 
@@ -14,24 +15,20 @@ public class FaceRegisterationEntity {
     // Member 엔티티와 외래키 관계 설정 (1명의 Member가 여러 개의 얼굴 등록 가능)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
+    @JsonIgnore
     private Member member;
-
-    // 사용자 이름(혹은 닉네임)
-    @Column(name = "user_name", nullable = false)
-    private String userName;
 
     // S3 업로드 후 반환되는 파일 URL (혹은 오브젝트 키)
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    // 기본 생성자
+    // 기본 생성자 (JPA 사용을 위해 필요)
     public FaceRegisterationEntity() {
     }
 
-    // 생성자
-    public FaceRegisterationEntity(Member member, String userName, String imageUrl) {
+    // ✅ userName 제거 후 새로운 생성자
+    public FaceRegisterationEntity(Member member, String imageUrl) {
         this.member = member;
-        this.userName = userName;
         this.imageUrl = imageUrl;
     }
 
@@ -42,10 +39,6 @@ public class FaceRegisterationEntity {
 
     public Member getMember() {
         return member;
-    }
-
-    public String getUserName() {
-        return userName;
     }
 
     public String getImageUrl() {
@@ -59,10 +52,6 @@ public class FaceRegisterationEntity {
 
     public void setMember(Member member) {
         this.member = member;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public void setImageUrl(String imageUrl) {

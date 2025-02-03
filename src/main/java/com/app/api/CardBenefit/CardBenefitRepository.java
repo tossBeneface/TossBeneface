@@ -12,6 +12,6 @@ public interface CardBenefitRepository extends JpaRepository<CardBenefitEntity, 
     // ✅ 특정 가게(shop)에서 사용 가능한 카드 혜택 조회
     List<CardBenefitEntity> findByShop(String shop);
 
-    // ✅ corcompany와 cardName을 기준으로 카드 혜택 조회
-    Optional<CardBenefitEntity> findByCardNameAndCorp(String cardName, String corp);
+    // ✅ corcompany와 cardName을 기준으로 카드 혜택 조회 (여러 결과 반환)
+    List<CardBenefitEntity> findByCardNameAndCorp(String cardName, String corp);
 }
