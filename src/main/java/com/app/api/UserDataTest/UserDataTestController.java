@@ -9,6 +9,9 @@ import com.app.api.CardBenefit.CardBenefitRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user-data-test")
@@ -22,6 +25,8 @@ public class UserDataTestController {
 
     @Autowired
     private CardBenefitRepository cardBenefitRepository;
+
+    // 기존 API들 ...
 
     // ✅ POST 요청: UserData 저장 (corcompany 및 cardName 기반으로 저장)
     @PostMapping
@@ -40,13 +45,15 @@ public class UserDataTestController {
         if (userData.getCorcompany() == null || userData.getCard() == null) {
             return "❌ Corcompany and Card are required!";
         }
-        Optional<CardBenefitEntity> cardBenefitOptional = cardBenefitRepository.findByCardNameAndCorp(
+        // Repository가 여러 결과를 반환하도록 수정되어 있으므로 List로 받아야 합니다.
+        List<CardBenefitEntity> cardBenefitList = cardBenefitRepository.findByCardNameAndCorp(
                 userData.getCard(), userData.getCorcompany()
         );
-        if (cardBenefitOptional.isEmpty()) {
+        if (cardBenefitList.isEmpty()) {
             return "❌ Card Benefit not found!";
         }
-        CardBenefitEntity cardBenefit = cardBenefitOptional.get();
+        // 여러 결과 중 첫 번째 결과를 사용 (필요에 따라 다른 로직을 적용할 수 있음)
+        CardBenefitEntity cardBenefit = cardBenefitList.get(0);
 
         // 관계 설정
         userData.setMember(member);
@@ -74,5 +81,27 @@ public class UserDataTestController {
     @GetMapping("/card-benefits")
     public List<CardBenefitEntity> getCardBenefitsByMemberId(@RequestParam Long memberId) {
         return userDataTestRepository.findCardBenefitsByMemberId(memberId);
+    }
+
+    // ✅ 추가된 API: 특정 회원(memberId)의 재무 관련 데이터(last_per, pay_amount, monthly_split, now_per, Accrue_benefit) 조회
+    @GetMapping("/financial-data")
+    public List<Map<String, Object>> getFinancialDataByMemberId(@RequestParam Long memberId) {
+        // Repository에서 7개 컬럼(card, corcompany, lastPer, payAmount, monthlySplit, nowPer, accrueBenefit)을 조회
+        List<Object[]> results = userDataTestRepository.findFinancialDataByMemberId(memberId);
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        // 각 행을 Map으로 변환
+        for (Object[] row : results) {
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("card", row[0]);
+            dataMap.put("corcompany", row[1]);
+            dataMap.put("last_per", row[2]);
+            dataMap.put("pay_amount", row[3]);
+            dataMap.put("monthly_split", row[4]);
+            dataMap.put("now_per", row[5]);
+            dataMap.put("Accrue_benefit", row[6]);
+            response.add(dataMap);
+        }
+        return response;
     }
 }

@@ -23,4 +23,9 @@ public interface UserDataTestRepository extends JpaRepository<UserDataTestEntity
         WHERE u.member.memberId = :memberId
     """)
     List<CardBenefitEntity> findCardBenefitsByMemberId(@Param("memberId") Long memberId);
+
+    // ✅ 특정 회원(memberId)의 재무 관련 데이터 조회 (card, corcompany, lastPer, payAmount, monthlySplit, nowPer, accrueBenefit)
+    @Query("SELECT u.card, u.corcompany, u.lastPer, u.payAmount, u.monthlySplit, u.nowPer, u.accrueBenefit " +
+            "FROM UserDataTestEntity u WHERE u.member.memberId = :memberId")
+    List<Object[]> findFinancialDataByMemberId(@Param("memberId") Long memberId);
 }
