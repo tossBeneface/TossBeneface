@@ -19,6 +19,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Verify gradlew file exists
+        run: ls -l gradlew  # GitHub Actions에서 gradlew 파일이 존재하는지 확인
+
       - name: Grant Execute Permission for Gradle
         run: chmod +x gradlew
 
