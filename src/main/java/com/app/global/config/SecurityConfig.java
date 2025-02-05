@@ -65,20 +65,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // JWT방식에서는 세션이 필요 없음
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/swagger-ui/**", /* Swagger UI*/"/v3/api-docs/**", /*OpenAPI 문서*/
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-                                "/api/health","/api/join", "/api/login", "/api/access-token/issue", "/h2-console/**", "/api/qnaboard/**", "/api/member/info", "/api/card-benefits", "/api/flow").permitAll() // 인증 없이 접근 허용
-=======
+                        .requestMatchers( "/swagger-ui/**", /* Swagger UI*/"/v3/api-docs/**", /*OpenAPI 문서*/// 인증 없이 접근 허용
                                 "/api/health","/api/join", "/api/login", "/api/access-token/issue", "/h2-console/**",
                                 "/api/qnaboard/**", "/api/member/info", "/api/card-benefits", "/api/flow","/api/payments/**", "/payment/**", "/success/**", "http://localhost:8080/api/v1/payments/toss/fail/**", "http://localhost:8080/api/v1/payments/toss/success/**", "/api/payment/**", "/fail/**", "https://api.tosspayments.com/v1/payments/confirm/**",
-                                "/api/user-data-test/**", "/api/faces/**").permitAll() // 인증 없이 접근 허용
->>>>>>> Stashed changes
-=======
-                                "/api/health","/api/join", "/api/login", "/api/access-token/issue", "/h2-console/**",
-                                "/api/qnaboard/**", "/api/member/info", "/api/card-benefits", "/api/flow",
                                 "/api/user-data-test/**", "/api/faces/**", "/api/card-benefits/**","/api/products/**").permitAll() // 인증 없이 접근 허용
->>>>>>> e21acbea14d90abd206f4c56a752cdedde10e90f
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 )
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())
