@@ -37,11 +37,12 @@ public class WebConfig implements WebMvcConfigurer {
             .excludePathPatterns( "/swagger-ui/**", // Swagger UI
                     "/v3/api-docs/**", // OpenAPI 문서
                     "/api/join", "/api/join/**",
-                    "/api/login", "/api/login/**",
-                    "/h2-console/**","/api/qnaboard/test",
-                    "/api/access-token/issue", "/api/access-token/issue/**",
-                    "/api/health", "/api/flow",
-                    "/api/card-benefits", "/api/card-benefits/**",
+                "/api/login", "/api/login/**",
+                "/h2-console/**",
+                "/api/access-token/issue", "/api/access-token/issue/**",
+                "/api/health", "/api/card-benefits", "/api/flow",
+                    "/api/card-benefits/**",
+                    "/api/qnaboard/test",
                     "/api/user-data-test", "/api/user-data-test/**",
                     "/api/v1/payments/**", "/api/faces/**", "/api/products/**");
         registry.addInterceptor(adminAuthorizationInterceptor)
