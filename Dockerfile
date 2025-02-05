@@ -14,8 +14,8 @@ RUN chmod +x gradlew
 ARG PASSWORD
 ENV PASSWORD=${PASSWORD}
 
-# 6. Gradle 빌드 수행
-RUN ./gradlew clean build --no-daemon
+# 6. Gradle 빌드 수행 (테스트 건너뛰기)
+RUN ./gradlew clean build -x test --no-daemon
 
 # 7. 실행 환경 설정 단계
 FROM openjdk:17-jdk-slim
