@@ -1,8 +1,6 @@
-.gradle/
 build/
 *.iml
-.idea/
 *.log
 *.git
 .DS_Store
-node_modules/
+!build/libs/

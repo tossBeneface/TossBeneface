@@ -60,6 +60,7 @@ public class WebConfig implements WebMvcConfigurer {
 //                .allowedOrigins("http://localhost:8082")
                 .allowedOriginPatterns("*")
                 .allowedMethods(
+                HttpMethod.HEAD.name(),
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
                 HttpMethod.PUT.name(),

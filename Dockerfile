@@ -5,10 +5,8 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # 3. Gradle 빌드된 JAR 파일을 컨테이너로 복사
-COPY build/libs/*.jar app.jar
+COPY ./build/libs/toss-beneface-0.0.1-SNAPSHOT.jar app.jar
 
-# 4. Jasypt 비밀번호 환경 변수 설정 (필요 시)
-ENV PASSWORD=sakncksjallkasdkl#$@^#*asdsiajodias2737
-
-# 5. 애플리케이션 실행
-ENTRYPOINT ["java", "-Djasypt.password=${PASSWORD}", "-jar", "/app.jar"]
+# 4. 애플리케이션 실행
+#ENTRYPOINT ["java", "-Djasypt.password=${PASSWORD}", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "java -Djasypt.password=$PASSWORD -jar app.jar"]

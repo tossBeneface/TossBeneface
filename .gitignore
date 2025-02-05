@@ -8,6 +8,7 @@ build/
 !**/src/test/**/build/
 src/main/generated
 /gradlew.bat
+.env
 
 ### STS ###
 .apt_generated
