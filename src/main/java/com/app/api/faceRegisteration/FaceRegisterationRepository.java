@@ -10,11 +10,12 @@ import java.util.List;
 @Repository
 public interface FaceRegisterationRepository extends JpaRepository<FaceRegisterationEntity, Long> {
 
-    // ✅ 사용자 이름 검색 제거 (userName 삭제)
-
     // 이미지 URL로 검색
     Optional<FaceRegisterationEntity> findByImageUrl(String imageUrl);
 
-    // ✅ 특정 회원(memberId)의 얼굴 데이터 조회
+    // 특정 회원(memberId)의 얼굴 데이터 조회
     List<FaceRegisterationEntity> findByMember_MemberId(Long memberId);
+
+    // ➡️ "가장 최근 5개" 조회
+    List<FaceRegisterationEntity> findTop5ByOrderByIdDesc();
 }

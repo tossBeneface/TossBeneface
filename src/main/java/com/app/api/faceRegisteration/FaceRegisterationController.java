@@ -72,6 +72,18 @@ public class FaceRegisterationController {
     }
 
     /**
+     * DB에서 최근 5개의 얼굴 정보만 조회
+     */
+    @GetMapping("/last5")
+    public ResponseEntity<List<FaceRegisterationDTO>> getLastFiveFaces() {
+        List<FaceRegisterationEntity> entities = faceRegisterationRepository.findTop5ByOrderByIdDesc();
+        List<FaceRegisterationDTO> dtos = entities.stream()
+                .map(FaceRegisterationDTO::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
      * DB에 있는 모든 얼굴 정보 조회
      */
     @GetMapping("/all")
