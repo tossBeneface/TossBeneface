@@ -68,7 +68,7 @@ public class SecurityConfig {
                         .requestMatchers( "/swagger-ui/**", /* Swagger UI*/"/v3/api-docs/**", /*OpenAPI 문서*/
                                 "/api/health","/api/join", "/api/login", "/api/access-token/issue", "/h2-console/**",
                                 "/api/qnaboard/**", "/api/member/info", "/api/card-benefits", "/api/flow",
-                                "/api/user-data-test/**", "/api/faces/**", "/api/card-benefits/**").permitAll() // 인증 없이 접근 허용
+                                "/api/user-data-test/**", "/api/faces/**", "/api/card-benefits/**","/api/products/**").permitAll() // 인증 없이 접근 허용
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 )
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())
