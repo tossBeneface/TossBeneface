@@ -29,11 +29,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build --no-daemon
 
-      - name: Copy .env to EC2
-        run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-          scp -i ~/.ssh/your-key.pem .env ubuntu@YOUR_EC2_IP:/home/ubuntu/.env      
-
       - name: Build & Push Docker Image
         run: |
           docker build --build-arg PASSWORD=${{ secrets.PASSWORD }} -t jean202/toss-beneface:latest .
