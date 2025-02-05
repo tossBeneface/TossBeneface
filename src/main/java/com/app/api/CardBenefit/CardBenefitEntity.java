@@ -1,48 +1,63 @@
 package com.app.api.CardBenefit;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import com.app.domain.common.BaseEntity;
+import com.app.api.UserDataTest.UserDataTestEntity;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "CARD_BENEFIT")
-public class CardBenefitEntity {
+public class CardBenefitEntity extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    // Card 컬럼
+    @Column(name = "card_name", nullable = true)
     private String cardName;
 
-    @Column(nullable = false)
+    // corcompany 컬럼
+    @Column(name = "corcompany", nullable = true)
     private String corp;
 
-    @Column(nullable = false)
+    // summary 컬럼
+    @Column(name = "summary", nullable = true)
     private String summary;
 
-    @Column
-    private int accumulation;
+    // Shop 컬럼
+    @Column(name = "Shop", nullable = true)
+    private String shop;
 
-    @Column
-    private int mileage;
+    // Benefit 컬럼
+    @Column(name = "Benefit", nullable = true)
+    private int benefit;
 
-    @Column
-    private int discount;
-
-    @Column
+    // Limit_once 컬럼
+    @Column(name = "Limit_once", nullable = true)
     private int limitOnce;
 
-    @Column
+    // Limit_month 컬럼
+    @Column(name = "Limit_month", nullable = true)
     private int limitMonth;
 
-    @Column
-    private int minPay;
+    // 추가된 칼럼
+    @Column(name = "min_pay", nullable = true)
+    private int minPay; // 혜택을 받기 위한 최소 결제 금액
 
-    @Column
-    private int minPer;
+    @Column(name = "min_per", nullable = true)
+    private int minPer; // 혜택을 받기 위한 최소 실적
 
-    @Column
-    private int monthly;
+    @Column(name = "monthly", nullable = true)
+    private int monthly; // 혜택을 받을 수 있는 횟수
+
+    @OneToMany(mappedBy = "cardBenefit", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // ✅ JSON 직렬화 시 userDataList 제외
+    private List<UserDataTestEntity> userDataList;
 }

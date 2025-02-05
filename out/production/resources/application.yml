@@ -1,7 +1,3 @@
-hospital:
-  api:
-    host: http://127.0.0.1:8000
-
 server:
   port: 8080
   servlet:
@@ -11,35 +7,17 @@ server:
     max-http-form-post-size: 20971520
 
 spring:
-<<<<<<< HEAD
-    jackson:
-      serialization:
-        write-dates-as-timestamps: false  # 날짜를 타임스탬프 형식이 아닌 ISO 8601 형식으로 직렬화
-        
-=======
   jackson:
     serialization:
       write-dates-as-timestamps: false  # 날짜를 타임스탬프 형식이 아닌 ISO 8601 형식으로 직렬화
 
->>>>>>> e21acbea14d90abd206f4c56a752cdedde10e90f
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
-    
+
   profiles:
-<<<<<<< Updated upstream
     active: prod
-    
-=======
-    active: local
 
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
-  profiles:
-    active: local
-
->>>>>>> e21acbea14d90abd206f4c56a752cdedde10e90f
   servlet:
     multipart:
       enabled: true
@@ -50,11 +28,7 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-<<<<<<< HEAD
-      
-=======
 
->>>>>>> e21acbea14d90abd206f4c56a752cdedde10e90f
   web:
     resources:
       static-locations:
