@@ -24,7 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/api/payment")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class PaymentController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -37,18 +39,18 @@ public class PaymentController {
     @RequestMapping(value = {"/confirm/widget", "/confirm/payment"})
     public ResponseEntity<JSONObject> confirmPayment(HttpServletRequest request,
                                                      @MemberInfo MemberInfoDto memberInfoDto,
-                                                     @RequestBody String jsonBody) throws Exception {
+                                                     @RequestBody(required = false) String jsonBody) throws Exception {
         String secretKey = request.getRequestURI().contains("/confirm/payment") ? API_SECRET_KEY : WIDGET_SECRET_KEY;
 
         // 결제 요청에 대한 응답을 받기
         JSONObject response = sendRequest(parseRequestData(jsonBody), secretKey, "https://api.tosspayments.com/v1/payments/confirm");
-
+        logger.info("Response ; " + String.valueOf(response));
         int statusCode = response.has("error") ? 400 : 200;
 
-        if (!response.has("error")) {
+//        if (!response.has("error")) {
             // DB에 결제 정보 저장
-            paymentService.savePayment(response, memberInfoDto); // ✅ DB 저장과 함께 예산 차감
-        }
+        paymentService.savePayment(response, memberInfoDto); // ✅ DB 저장과 함께 예산 차감
+//        }
 
         return ResponseEntity.status(statusCode).body(response);
     }
