@@ -21,7 +21,8 @@ Content-Disposition: form-data; name="requestDto"
 --WebAppBoundary
 Content-Disposition: form-data; name="files"; filename="barrierfreekiosknews.jpg"
 
-< C:\Users\User\bigproject\test\barrierfreekiosknews.jpg
+< C:\Users\User\kt_aivle\bigproject\test\barrierfreekiosknews.jpg
+"C:\Users\User\Pictures\Screenshots\스크린샷 2025-01-24 164515.png"
 --WebAppBoundary
 Content-Disposition: form-data; name="files"; filename="file1.png"
 

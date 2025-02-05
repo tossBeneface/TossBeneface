@@ -37,7 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
                 "/api/access-token/issue", "/api/access-token/issue/**",
                 "/api/health", "/api/card-benefits",
                     "/api/card-benefits/**",
-                    "/api/qnaboard/test");
+                    "/api/qnaboard/test", "/api/products/**");
         registry.addInterceptor(adminAuthorizationInterceptor)
             .order(2)
             .addPathPatterns("/api/admin/**");
