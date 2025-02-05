@@ -37,12 +37,21 @@ public class WebConfig implements WebMvcConfigurer {
             .excludePathPatterns( "/swagger-ui/**", // Swagger UI
                     "/v3/api-docs/**", // OpenAPI 문서
                     "/api/join", "/api/join/**",
+<<<<<<< Updated upstream
                 "/api/login", "/api/login/**",
                 "/h2-console/**",
                 "/api/access-token/issue", "/api/access-token/issue/**",
                 "/api/health", "/api/card-benefits", "/api/flow",
                     "/api/card-benefits/**",
                     "/api/qnaboard/test", "/api/v1/payments/**");
+=======
+                    "/api/login", "/api/login/**",
+                    "/h2-console/**","/api/qnaboard/test",
+                    "/api/access-token/issue", "/api/access-token/issue/**",
+                    "/api/health", "/api/flow",
+                    "/api/card-benefits", "/api/card-benefits/**",
+                    "/api/user-data-test", "/api/user-data-test/**");
+>>>>>>> Stashed changes
         registry.addInterceptor(adminAuthorizationInterceptor)
             .order(2)
             .addPathPatterns("/api/admin/**");

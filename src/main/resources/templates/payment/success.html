@@ -48,7 +48,7 @@
 
 <script>
   const urlParams = new URLSearchParams(window.location.search);
-  const accessToken = 'eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3MzgzOTUzMDQsImV4cCI6MTczODM5NjIwNCwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.w0s9rB2qHDfTeEqeo6c54YMzaJ64af6l1BgNDRhWpdVznHK2rmFOhKKKT8DppPVdy0iFRpTv7j8BKyUyNn033g'
+  const accessToken = 'eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBQ0NFU1MiLCJpYXQiOjE3Mzg3MTU1NDIsImV4cCI6MTczODcxNjQ0MiwibWVtYmVySWQiOjEsInJvbGUiOiJVU0VSIn0.4crDe_gXQiUMBTGuab7zgMqM8c96qwQh9nGqaI_EtjHJzlfdhuoFMYtqoO8kArusDSWNu1Zabg_FQh-jijCkYQ';
   console.log(accessToken);
 
   // 서버로 결제 승인 요청을 보냄
@@ -59,7 +59,7 @@
       amount: urlParams.get("amount"),
     };
 
-    const response = await fetch("/confirm/payment", {
+    const response = await fetch("/api/payment/confirm/payment", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

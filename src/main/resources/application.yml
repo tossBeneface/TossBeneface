@@ -16,8 +16,13 @@ spring:
     suffix: .html
     
   profiles:
+<<<<<<< Updated upstream
     active: prod
     
+=======
+    active: local
+
+>>>>>>> Stashed changes
   servlet:
     multipart:
       enabled: true
