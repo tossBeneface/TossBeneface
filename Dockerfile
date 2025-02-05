@@ -16,4 +16,5 @@ WORKDIR /app
 COPY --from=builder /app/build/libs/toss-beneface-0.0.1-SNAPSHOT.jar app.jar
 
 # 4. 애플리케이션 실행
+ENV PASSWORD=${PASSWORD}
 ENTRYPOINT ["sh", "-c", "java -Djasypt.password=$PASSWORD -jar app.jar"]
