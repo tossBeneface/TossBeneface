@@ -78,13 +78,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // '/widget/**' URL을 'classpath:/templates/widget/' 디렉토리로 매핑
-        registry.addResourceHandler("/widget/**")
-                .addResourceLocations("classpath:/templates/widget/");
-
-        // '/payment/**' URL을 'classpath:/templates/payment/' 디렉토리로 매핑
-        registry.addResourceHandler("/payment/**")
-                .addResourceLocations("classpath:/templates/payment/");
+//        // '/widget/**' URL을 'classpath:/templates/widget/' 디렉토리로 매핑
+//        registry.addResourceHandler("/widget/**")
+//                .addResourceLocations("classpath:/templates/widget/");
+//
+//        // '/payment/**' URL을 'classpath:/templates/payment/' 디렉토리로 매핑
+//        registry.addResourceHandler("/payment/**")
+//                .addResourceLocations("classpath:/templates/payment/");
     }
 
     @Bean
