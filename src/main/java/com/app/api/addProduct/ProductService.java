@@ -21,10 +21,11 @@ public class ProductService {
     }
 
     // 상품 수정 (파일 포함)
-    public Product updateProduct(Long id, String menu, int price, int stock, String img) {
+    public Product updateProduct(Long id, String cafe, String menu, int price, int stock, String img) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
+        existingProduct.setCafe(cafe);   // <-- 추가
         existingProduct.setMenu(menu);
         existingProduct.setPrice(price);
         existingProduct.setStock(stock);
