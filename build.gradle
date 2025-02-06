@@ -90,6 +90,10 @@ dependencies {
 	// SLF4J API
 	implementation 'org.slf4j:slf4j-api:2.0.0'
 
+	// 	QR 발급
+	implementation 'com.google.zxing:core:3.5.3'
+	implementation 'com.google.zxing:javase:3.5.3'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }
