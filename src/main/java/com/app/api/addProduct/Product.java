@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import com.app.domain.common.BaseEntity;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto Increment
