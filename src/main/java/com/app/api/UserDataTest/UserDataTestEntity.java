@@ -59,6 +59,9 @@ public class UserDataTestEntity extends BaseEntity {
     @Column(name = "now_per", nullable = false)
     private int nowPer; // 금월 실적
 
+    @Column(name = "card_limit", nullable = false)
+    private int cardLimit; // 카드 한도
+
     @Column(name = "monthly_split", nullable = false)
     private int monthlySplit; // 혜택 받은 횟수
 

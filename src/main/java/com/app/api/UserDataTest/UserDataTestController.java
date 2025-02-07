@@ -26,8 +26,6 @@ public class UserDataTestController {
     @Autowired
     private CardBenefitRepository cardBenefitRepository;
 
-    // 기존 API들 ...
-
     // ✅ POST 요청: UserData 저장 (corcompany 및 cardName 기반으로 저장)
     @PostMapping
     public String saveUserData(@RequestBody UserDataTestEntity userData) {

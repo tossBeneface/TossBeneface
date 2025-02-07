@@ -1,14 +1,15 @@
 package com.app.api.UserDataTest;
 
-import com.app.domain.card.entity.Card;
 import com.app.api.CardBenefit.CardBenefitEntity;
+import com.app.api.UserDataTest.dto.UserCardListDto;
+import com.app.domain.card.entity.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import java.util.List;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserDataTestRepository extends JpaRepository<UserDataTestEntity, Long> {
@@ -30,8 +31,14 @@ public interface UserDataTestRepository extends JpaRepository<UserDataTestEntity
             "FROM UserDataTestEntity u WHERE u.member.memberId = :memberId")
     List<Object[]> findFinancialDataByMemberId(@Param("memberId") Long memberId);
 
-    // card 테이블과 조인하여 카드 정보 가져옴
-    @Query("SELECT c.cardName, c.cardCompany, c.cardImage, IFNULL(u.accrueBenefit, 0) AS amount " +
-            "FROM UserDataTestEntity u JOIN Card c ON c.id = u.card.id WHERE u.member.memberId = :memberId")
-    List<UserDataTestEntity> findByMemberId(Long memberId);
+    // card 테이블과 조인하여 user가 보유한 카드 목록 가져옴
+    @Query("SELECT new com.app.api.UserDataTest.dto.UserCardListDto(c.cardName, c.cardCompany, c.cardImage, COALESCE(u.accrueBenefit, 0)) " +
+            "FROM UserDataTestEntity u " +
+            "JOIN u.card c " +
+            "WHERE u.member.memberId = :memberId")
+    List<UserCardListDto> findCardListByMemberId(@Param("memberId") Long memberId);
+
+    // card_name과 card_company로 card 테이블에서 카드 조회
+    @Query("SELECT c FROM Card c WHERE c.cardName = :cardName AND c.cardCompany = :cardCompany")
+    Optional<Card> findCardByNameAndCompany(@Param("cardName") String cardName, @Param("cardCompany") String cardCompany);
 }
