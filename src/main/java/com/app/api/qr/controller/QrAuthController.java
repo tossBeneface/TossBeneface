@@ -17,6 +17,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api")
 public class QrAuthController {
 
     private final QrAuthRepository qrAuthRepository;
