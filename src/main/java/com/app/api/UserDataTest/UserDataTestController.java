@@ -44,7 +44,7 @@ public class UserDataTestController {
             return "❌ CardCompany and CardName are required!";
         }
         // Repository가 여러 결과를 반환하도록 수정되어 있으므로 List로 받아야 합니다.
-        List<CardBenefitEntity> cardBenefitList = cardBenefitRepository.findByCardNameAndCorp(
+        List<CardBenefitEntity> cardBenefitList = cardBenefitRepository.findByCardNameAndCardCompany(
                 userData.getCardName(), userData.getCardCompany()
         );
         if (cardBenefitList.isEmpty()) {

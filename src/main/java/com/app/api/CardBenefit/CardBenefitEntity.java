@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import com.app.domain.common.BaseEntity;
 import com.app.api.UserDataTest.UserDataTestEntity;
+import com.app.domain.card.entity.Card;
 
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class CardBenefitEntity extends BaseEntity {
     private String cardName;
 
     // corcompany 컬럼
-    @Column(name = "corcompany", nullable = true)
-    private String corp;
+    @Column(name = "card_company", nullable = true)
+    private String cardCompany;
 
     // summary 컬럼
     @Column(name = "summary", nullable = true)
@@ -60,4 +61,9 @@ public class CardBenefitEntity extends BaseEntity {
     @OneToMany(mappedBy = "cardBenefit", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore // ✅ JSON 직렬화 시 userDataList 제외
     private List<UserDataTestEntity> userDataList;
+
+    // ✅ Card와의 외래키 설정 추가
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "card_id", nullable = false) // card_id는 card 테이블의 id와 연결
+    private Card card;
 }
