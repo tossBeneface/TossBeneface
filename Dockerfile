@@ -32,5 +32,5 @@ COPY --from=builder /app/build/libs/*.jar app.jar
 # 10. 실행 시 환경 변수 전달
 ENV PASSWORD=${PASSWORD}
 
-# 11. 애플리케이션 실행
-ENTRYPOINT ["sh", "-c", "java -Djasypt.password=$PASSWORD -jar app.jar"]
+# 11. 애플리케이션 실행 (한국 시간대 설정)
+ENTRYPOINT ["sh", "-c", "java -Duser.timezone=Asia/Seoul -Djasypt.password=$PASSWORD -jar app.jar"]
