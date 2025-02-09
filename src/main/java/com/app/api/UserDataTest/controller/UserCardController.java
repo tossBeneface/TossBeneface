@@ -21,14 +21,16 @@ public class UserCardController {
     }
 
     //  회원의 카드 목록을 조회하는 API (@param memberId 회원 ID, @return 회원이 보유한 카드 목록)
-    @GetMapping("/{memberId}")
+    @GetMapping
     public ResponseEntity<List<UserCardListDto>> getUserCards(@MemberInfo MemberInfoDto memberInfoDto) {
         List<UserCardListDto> userCards = userCardService.getUserCards(memberInfoDto.getMemberId());
         return ResponseEntity.ok(userCards);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerCard(@RequestBody UserCardRegisterDto dto) {
-        return ResponseEntity.ok(userCardService.registerCard(dto));
+    public ResponseEntity<String> registerCard(
+            @RequestBody UserCardRegisterDto dto,
+            @MemberInfo MemberInfoDto memberInfoDto) {
+        return ResponseEntity.ok(userCardService.registerCard(dto, memberInfoDto.getMemberId()));
     }
 }
