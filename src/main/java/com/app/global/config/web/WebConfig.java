@@ -44,11 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
                     "/api/card-benefits/**",
                     "/api/qnaboard/test",
                     "/api/user-data-test", "/api/user-data-test/**",
-
-                    "/api/v1/payments/**", "/api/faces/**", "/api/products/**", "/api/member/name/**");
-
-                    "/api/v1/payments/**", "/api/faces/**", "/api/products/**", "/qr/authenticate", "/api/flow", "/api/member/name/**");
-
+                    "/api/v1/payments/**", "/api/faces/**", "/api/products/**", "/api/qr/authenticate", "/api/flow", "/api/member/name/**", "/api/flow", "/api/member/name/**");
         registry.addInterceptor(adminAuthorizationInterceptor)
             .order(2)
             .addPathPatterns("/api/admin/**");
