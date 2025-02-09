@@ -34,21 +34,12 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(authenticationInterceptor)
             .order(1) // 인증 인터셉터가 가장 먼저 동작하도록 설정
             .addPathPatterns("/api/**")
-            .excludePathPatterns( "/swagger-ui/**", // Swagger UI
-                    "/v3/api-docs/**", // OpenAPI 문서
-                    "/api/join", "/api/join/**",
-                "/api/login", "/api/login/**",
-                "/h2-console/**",
-                "/api/access-token/issue", "/api/access-token/issue/**",
-                "/api/health", "/api/card-benefits", "/api/flow",
-                    "/api/card-benefits/**",
-                    "/api/qnaboard/test",
-                    "/api/user-data-test", "/api/user-data-test/**",
-
-                    "/api/v1/payments/**", "/api/faces/**", "/api/products/**", "/api/member/name/**");
-
-                    "/api/v1/payments/**", "/api/faces/**", "/api/products/**", "/qr/authenticate", "/api/flow", "/api/member/name/**");
-
+            .excludePathPatterns(
+                    "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**",
+                    "/api/join", "/api/join/**", "/api/login", "/api/login/**",
+                    "/api/access-token/issue", "/api/access-token/issue/**", "/api/health", "/api/qnaboard/test",
+                    "/api/card-benefits", "/api/card-benefits/**", "/api/user-data-test", "/api/user-data-test/**",
+                    "/api/v1/payments/**", "/api/faces/**", "/api/products/**", "/api/flow", "/api/member/name/**");
         registry.addInterceptor(adminAuthorizationInterceptor)
             .order(2)
             .addPathPatterns("/api/admin/**");
