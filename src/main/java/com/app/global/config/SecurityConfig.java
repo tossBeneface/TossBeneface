@@ -69,6 +69,9 @@ public class SecurityConfig {
                                 "/api/health","/api/join", "/api/login", "/api/access-token/issue", "/h2-console/**",
                                 "/api/qnaboard/**", "/api/member/info", "/api/card-benefits", "/api/flow","/api/payments/**", "/payment/**", "/success/**", "http://localhost:8080/api/v1/payments/toss/fail/**", "http://localhost:8080/api/v1/payments/toss/success/**", "/api/payment/**", "/fail/**", "https://api.tosspayments.com/v1/payments/confirm/**",
                                 "/api/user-data-test/**", "/api/faces/**", "/api/card-benefits/**","/api/products/**", "/api/qr/generate", "/api/qr/authenticate").permitAll() // 인증 없이 접근 허용
+
+//                                "/api/user-data-test/**", "/api/faces/**", "/api/card-benefits/**","/api/products/**", "/api/qr/**", "/qr/authenticate","/api/member/name/**").permitAll() // 인증 없이 접근 허용
+
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 )
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())

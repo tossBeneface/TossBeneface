@@ -129,7 +129,7 @@ public class ProductController {
         fastApiRequest.put("menus", menuNames);
 
         // 6) FastAPI 엔드포인트로 POST (restTemplate 사용)
-        String fastapiUrl = "http://127.0.0.1:8000/voice-process"; // 실제 FastAPI 주소/포트
+        String fastapiUrl = "http://127.0.0.1:8000/fastapi/voice-process"; // 실제 FastAPI 주소/포트
         RestTemplate restTemplate = new RestTemplate();
 
         try {
