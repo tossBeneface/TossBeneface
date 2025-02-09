@@ -31,7 +31,7 @@ public class CardBenefitController {
     public ResponseEntity<?> getCardBenefitDetails(@RequestParam("carcompany") String carcompany,
                                                    @RequestParam("card_name") String cardName) {
         // 여러 결과를 반환하도록 수정한 Repository 메서드 호출
-        List<CardBenefitEntity> benefitList = repository.findByCardNameAndCorp(cardName, carcompany);
+        List<CardBenefitEntity> benefitList = repository.findByCardNameAndCardCompany(cardName, carcompany);
 
         if (benefitList != null && !benefitList.isEmpty()) {
             List<Map<String, Object>> response = new ArrayList<>();

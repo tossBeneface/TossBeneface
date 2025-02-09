@@ -2,8 +2,14 @@
 
 인텔리제이 실행시 vm option으로
 
+1) prod 환경으로 실행 원할 경우
 ```Bash
 -Djasypt.password=sakncksjallkasdkl#$@^#*asdsiajodias2737
+```
+
+2) local 환경으로 실행 원할 경우
+```Bash
+-Djasypt.password=sakncksjallkasdkl#$@^#*asdsiajodias2737 -Dspring.profiles.active=local
 ```
 
 추가해야 동작함
