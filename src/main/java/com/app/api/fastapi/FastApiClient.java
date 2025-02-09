@@ -12,7 +12,7 @@ import java.util.List;
  * FastApiClient
  * @app.get("/hospital/{request}/{latitude}/{longitude}") 를 호출한다.
  */
-@FeignClient(name = "fastApiClient", url = "${hospital.api.host}")
+@FeignClient(name = "fastApiClient", url = "${fast.api.host}")
 public interface FastApiClient {
 
      @GetMapping("/hospital_by_module")

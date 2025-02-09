@@ -36,6 +36,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/toss-beneface:latest
 
       - name: Deploy to EC2
+        if: always()
         env:
           PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
         run: |
