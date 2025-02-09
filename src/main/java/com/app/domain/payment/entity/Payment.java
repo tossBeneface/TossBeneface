@@ -26,4 +26,5 @@ public class Payment {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
 }
