@@ -26,8 +26,6 @@ public class UserDataTestController {
     @Autowired
     private CardBenefitRepository cardBenefitRepository;
 
-    // 기존 API들 ...
-
     // ✅ POST 요청: UserData 저장 (corcompany 및 cardName 기반으로 저장)
     @PostMapping
     public String saveUserData(@RequestBody UserDataTestEntity userData) {
@@ -42,12 +40,12 @@ public class UserDataTestController {
         Member member = memberOptional.get();
 
         // ✅ `cardBenefitId` 없이 `corcompany` + `card` 기반으로 조회
-        if (userData.getCorcompany() == null || userData.getCard() == null) {
-            return "❌ Corcompany and Card are required!";
+        if (userData.getCardCompany() == null || userData.getCard() == null) {
+            return "❌ CardCompany and CardName are required!";
         }
         // Repository가 여러 결과를 반환하도록 수정되어 있으므로 List로 받아야 합니다.
-        List<CardBenefitEntity> cardBenefitList = cardBenefitRepository.findByCardNameAndCorp(
-                userData.getCard(), userData.getCorcompany()
+        List<CardBenefitEntity> cardBenefitList = cardBenefitRepository.findByCardNameAndCardCompany(
+                userData.getCardName(), userData.getCardCompany()
         );
         if (cardBenefitList.isEmpty()) {
             return "❌ Card Benefit not found!";
@@ -57,7 +55,7 @@ public class UserDataTestController {
 
         // 관계 설정
         userData.setMember(member);
-        userData.setCardBenefit(cardBenefit);
+//        userData.setCardBenefit(cardBenefit);
 
         // 저장
         userDataTestRepository.save(userData);
@@ -93,8 +91,8 @@ public class UserDataTestController {
         // 각 행을 Map으로 변환
         for (Object[] row : results) {
             Map<String, Object> dataMap = new HashMap<>();
-            dataMap.put("card", row[0]);
-            dataMap.put("corcompany", row[1]);
+            dataMap.put("card_name", row[0]);
+            dataMap.put("card_company", row[1]);
             dataMap.put("last_per", row[2]);
             dataMap.put("pay_amount", row[3]);
             dataMap.put("monthly_split", row[4]);
