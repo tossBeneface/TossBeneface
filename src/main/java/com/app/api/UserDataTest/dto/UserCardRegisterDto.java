@@ -12,5 +12,4 @@ public class UserCardRegisterDto {
     private String expiryDate;    // 유효기간
     private int cvc;              // CVC 번호
     private int pwd;              // 카드 비밀번호
-    private Long memberId;        // 회원 ID
 }

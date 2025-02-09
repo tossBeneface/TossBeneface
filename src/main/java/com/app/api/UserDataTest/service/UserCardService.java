@@ -31,17 +31,17 @@ public class UserCardService {
 
     //  회원의 카드 등록 (@param dto 카드 등록 요청 DTO, @return 성공 메시지)
     @Transactional
-    public String registerCard(UserCardRegisterDto dto) {
+    public String registerCard(UserCardRegisterDto dto, Long memberId) {
         // 1. card 테이블에서 card_name과 card_company로 카드 조회
         Optional<Card> cardOptional = repository.findCardByNameAndCompany(dto.getCardName(), dto.getCardCompany());
         if (cardOptional.isEmpty()) {
             throw new IllegalArgumentException("존재하지 않는 카드입니다.");
         }
 
-        // 2. member 테이블에서 memberId가 존재하는지 조회
-        Optional<Member> memberOptional = memberRepository.findById(dto.getMemberId());
+        // 2. memberId로 member 테이블 조회
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
         if (memberOptional.isEmpty()) {
-            throw new IllegalArgumentException("존재하지 않는 회원입니다. memberId: " + dto.getMemberId());
+            throw new IllegalArgumentException("존재하지 않는 회원입니다. memberId: " + memberId);
         }
 
         // 3. 랜덤 값 생성 (실적, 혜택 등)
@@ -65,6 +65,8 @@ public class UserCardService {
         userDataTest.setCardLimit(cardLimit);
         userDataTest.setMonthlySplit(monthlySplit);
         userDataTest.setAccrueBenefit(accrueBenefit);
+        userDataTest.setCardCompany(dto.getCardCompany());
+        userDataTest.setCardName(dto.getCardName());
 
         repository.save(userDataTest);
         return "카드 정보 저장 성공";
