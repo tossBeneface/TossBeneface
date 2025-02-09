@@ -3,7 +3,7 @@
 인텔리제이 실행시 vm option으로
 
 ```Bash
--Djasypt.password=sakncksjallkasdkl#$@^#*asdsiajodias2737
+-Djasypt.password=sakncksjallkasdkl#$@^#*asdsiajodias2737 -Dspring.profiles.active=local
 ```
 
 추가해야 동작함

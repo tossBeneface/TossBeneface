@@ -20,7 +20,7 @@ spring:
     suffix: .html
 
   profiles:
-    active: local
+    active: prod
 
   servlet:
     multipart:
