@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "member", description = "회원 API")
@@ -30,6 +31,11 @@ public class MemberInfoController {
         @ApiResponse(responseCode = "500", description = "서버 오류 발생"),
         @ApiResponse(responseCode = "M-003", description = "해당 회원은 존재하지 않는 회원입니다.")
     })
+    @GetMapping("/name")
+    public ResponseEntity<String> getMemberName(@RequestParam("memberId") Long memberId) {
+        String memberName = memberInfoService.getMemberName(memberId);
+        return ResponseEntity.ok(memberName);
+    }
     @GetMapping("/info")
     public ResponseEntity<MemberInfoResponseDto> getMemberInfo(@MemberInfo MemberInfoDto memberInfoDto) {
         Long memberId = memberInfoDto.getMemberId();
