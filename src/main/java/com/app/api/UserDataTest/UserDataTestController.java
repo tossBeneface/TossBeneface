@@ -55,7 +55,7 @@ public class UserDataTestController {
 
         // 관계 설정
         userData.setMember(member);
-        userData.setCardBenefit(cardBenefit);
+//        userData.setCardBenefit(cardBenefit);
 
         // 저장
         userDataTestRepository.save(userData);

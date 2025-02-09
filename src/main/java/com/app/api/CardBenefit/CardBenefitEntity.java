@@ -58,9 +58,9 @@ public class CardBenefitEntity extends BaseEntity {
     @Column(name = "monthly", nullable = true)
     private int monthly; // 혜택을 받을 수 있는 횟수
 
-    @OneToMany(mappedBy = "cardBenefit", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore // ✅ JSON 직렬화 시 userDataList 제외
-    private List<UserDataTestEntity> userDataList;
+//    @OneToMany(mappedBy = "cardBenefit", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonIgnore // ✅ JSON 직렬화 시 userDataList 제외
+//    private List<UserDataTestEntity> userDataList;
 
     // ✅ Card와의 외래키 설정 추가
     @ManyToOne(fetch = FetchType.LAZY)

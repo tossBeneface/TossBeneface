@@ -14,8 +14,8 @@ public class CardBin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "card_number", nullable = false)
-    private String cardNumber;
+    @Column(name = "card_bin", nullable = false)
+    private String cardBin;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id", nullable = false)

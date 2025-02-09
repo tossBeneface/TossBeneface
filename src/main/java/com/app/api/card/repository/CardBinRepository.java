@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface CardBinRepository extends JpaRepository<CardBin, Long> {
-    @Query("SELECT cb FROM CardBin cb WHERE cb.cardNumber = :cardNumber")
+    @Query("SELECT cb FROM CardBin cb WHERE cb.cardBin = :cardNumber")
     Optional<CardBin> findByCardNumber(@Param("cardNumber") String cardNumber);
 }

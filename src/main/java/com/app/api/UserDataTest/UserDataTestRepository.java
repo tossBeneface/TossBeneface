@@ -21,7 +21,7 @@ public interface UserDataTestRepository extends JpaRepository<UserDataTestEntity
     // ✅ 특정 회원(memberId)의 카드별 혜택 정보 조회 (corcompany + card를 기준으로 card_benefit 테이블 조인)
     @Query("""
         SELECT cb FROM CardBenefitEntity cb 
-        JOIN UserDataTestEntity u ON cb.cardName = u.cardName AND cb.corp = u.cardCompany
+        JOIN UserDataTestEntity u ON cb.cardName = u.cardName AND cb.cardCompany = u.cardCompany
         WHERE u.member.memberId = :memberId
     """)
     List<CardBenefitEntity> findCardBenefitsByMemberId(@Param("memberId") Long memberId);

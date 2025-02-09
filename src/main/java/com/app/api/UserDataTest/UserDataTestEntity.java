@@ -29,9 +29,9 @@ public class UserDataTestEntity extends BaseEntity {
     private Card card;
 
     // CardBenefit 엔티티와 외래키 관계 설정
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_benefit_id", nullable = false)
-    private CardBenefitEntity cardBenefit;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "card_benefit_id", nullable = false)
+//    private CardBenefitEntity cardBenefit;
 
     // 카드 정보 관련 필드 (추가)
     @Column(name = "card_name", nullable = false)

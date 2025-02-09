@@ -1,5 +1,6 @@
 package com.app.domain.qr.entity;
 
+import com.app.domain.common.BaseEntity;
 import com.app.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Controller;
 @Entity
 @Getter
 @Setter
-public class QrAuth {
+public class QrAuth extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
