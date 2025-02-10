@@ -2,18 +2,15 @@ package com.app.api.addProduct;
 
 import com.app.api.file.service.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.stream.Collectors;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
-import lombok.ToString;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/products")
@@ -129,7 +126,7 @@ public class ProductController {
         fastApiRequest.put("menus", menuNames);
 
         // 6) FastAPI 엔드포인트로 POST (restTemplate 사용)
-        String fastapiUrl = "http://127.0.0.1:8000/fastapi/voice-process"; // 실제 FastAPI 주소/포트
+        String fastapiUrl = "https://benefacefastapi20-frgtcya5bnefbdfs.koreacentral-01.azurewebsites.net/fastapi/voice-process"; // 실제 FastAPI 주소/포트
         RestTemplate restTemplate = new RestTemplate();
 
         try {
