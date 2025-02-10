@@ -114,7 +114,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("*")); // 모든 도메인을 허용, 필요 시 특정 도메인만 허용
+        config.setAllowedOriginPatterns(List.of(
+                "http://localhost:3000",
+                "https://app.tossbeneface.com",
+                "https://www.tossbeneface.com"
+        ));  // 모든 도메인을 허용, 필요 시 특정 도메인만 허용
         config.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")); // 허용할 HTTP 메서드
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept")); // 허용할 헤더
         config.setAllowCredentials(true); // 인증 정보 포함 허용
