@@ -28,15 +28,16 @@ public class CardBenefitController {
 
     // 신규 API: carcompany와 card_name 파라미터로 Benefit, limit_once, limit_month, min_pay, min_per, monthly 반환
     @GetMapping("/get_details")
-    public ResponseEntity<?> getCardBenefitDetails(@RequestParam("carcompany") String carcompany,
-                                                   @RequestParam("card_name") String cardName) {
-        // 여러 결과를 반환하도록 수정한 Repository 메서드 호출
-        List<CardBenefitEntity> benefitList = repository.findByCardNameAndCardCompany(cardName, carcompany);
+    public ResponseEntity<?> getCardBenefitDetails(
+            @RequestParam("carcompany") String carcompany,
+            @RequestParam("card_name") String cardName) {
+
+        // fetch join 메서드를 사용하여 연관된 Card 엔티티까지 함께 로딩합니다.
+        List<CardBenefitEntity> benefitList = repository.findByCardNameAndCardCompanyFetchCard(cardName, carcompany);
 
         if (benefitList != null && !benefitList.isEmpty()) {
             List<Map<String, Object>> response = new ArrayList<>();
 
-            // benefitList의 각 엔티티에 대해 세부 정보를 Map으로 생성
             for (CardBenefitEntity entity : benefitList) {
                 Map<String, Object> detail = new HashMap<>();
                 detail.put("Benefit", entity.getBenefit());
@@ -45,6 +46,9 @@ public class CardBenefitController {
                 detail.put("min_pay", entity.getMinPay());
                 detail.put("min_per", entity.getMinPer());
                 detail.put("monthly", entity.getMonthly());
+
+                // 연관된 Card 엔티티에서 cardImage 값을 가져옵니다.
+                detail.put("card_image", entity.getCard().getCardImage());
                 response.add(detail);
             }
             return ResponseEntity.ok(response);

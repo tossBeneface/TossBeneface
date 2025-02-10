@@ -35,3 +35,27 @@
 //        }
 //    }
 //}
+package com.app.api.card.controller;
+
+import com.app.api.card.service.CardService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/cards")
+public class CardController {
+
+    private final CardService cardService;
+
+    public CardController(CardService cardService) {
+        this.cardService = cardService;
+    }
+
+    // 예: GET /api/cards/image?card_name=...&card_company=...
+    @GetMapping("/image")
+    public ResponseEntity<String> getCardImage(@RequestParam("card_name") String cardName,
+                                               @RequestParam("card_company") String cardCompany) {
+        String cardImage = cardService.getCardImage(cardName, cardCompany);
+        return ResponseEntity.ok(cardImage);
+    }
+}
