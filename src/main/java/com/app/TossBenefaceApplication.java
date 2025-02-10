@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableConfigurationProperties
 public class TossBenefaceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TossBenefaceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TossBenefaceApplication.class, args);
+    }
 
 }
