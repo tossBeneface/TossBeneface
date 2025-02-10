@@ -8,10 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -47,24 +45,6 @@ public class WebConfig implements WebMvcConfigurer {
         log.debug("등록된 인터셉터 경로: /api/**");
 //        log.debug("Interceptor 호출: {}", request.getRequestURI());
 
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/api/**")
-        registry.addMapping("/**")
-//                .allowedOrigins("http://localhost:8082")
-                .allowedOriginPatterns("http://localhost:3000", "https://app.tossbeneface.com", "https://www.tossbeneface.com") // 허용할 도메인 명시
-                .allowedMethods(
-                HttpMethod.HEAD.name(),
-                HttpMethod.GET.name(),
-                HttpMethod.POST.name(),
-                HttpMethod.PUT.name(),
-                HttpMethod.PATCH.name(),
-                HttpMethod.DELETE.name(),
-                HttpMethod.OPTIONS.name()
-            ).allowedHeaders("Content-Type", "Authorization", "Accept")
-           .allowCredentials(true); // 쿠키 허용;
     }
 
     @Override
