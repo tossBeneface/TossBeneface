@@ -54,7 +54,7 @@ public class WebConfig implements WebMvcConfigurer {
 //        registry.addMapping("/api/**")
         registry.addMapping("/**")
 //                .allowedOrigins("http://localhost:8082")
-                .allowedOriginPatterns("*")
+                .allowedOriginPatterns("http://localhost:3000", "https://app.tossbeneface.com", "https://www.tossbeneface.com") // 허용할 도메인 명시
                 .allowedMethods(
                 HttpMethod.HEAD.name(),
                 HttpMethod.GET.name(),
