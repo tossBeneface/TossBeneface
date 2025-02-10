@@ -29,7 +29,6 @@ import java.util.Base64;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3001")
 public class QRController {
 
     private final SecureRandom secureRandom = new SecureRandom();

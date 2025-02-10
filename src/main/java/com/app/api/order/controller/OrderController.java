@@ -1,28 +1,39 @@
 package com.app.api.order.controller;
 
 import com.app.api.order.dto.OrderRequest;
-import com.app.api.order.service.OrderService;
+import com.app.api.order.repository.OrderItemRepository;
+import com.app.api.order.repository.OrderRepository;
 import com.app.domain.order.entity.OrderItem;
 import com.app.domain.order.entity.OrderPayment;
+import com.app.domain.member.entity.Member;
+import com.app.domain.member.repository.MemberRepository;
+import com.app.global.resolver.memberInfo.MemberInfo;
+import com.app.global.resolver.memberInfo.MemberInfoDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 public class OrderController {
 
-    private final OrderService orderService;  // Service를 주입받음
+    private final OrderRepository orderPaymentRepository;  // OrderRepository를 주입받음
+    private final MemberRepository memberRepository;  // MemberRepository 주입
+    private final OrderItemRepository orderItemRepository;
 
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    public OrderController(OrderRepository orderPaymentRepository, MemberRepository memberRepository, OrderItemRepository orderItemRepository) {
+        this.orderPaymentRepository = orderPaymentRepository;
+        this.memberRepository = memberRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createOrder(@RequestBody OrderRequest request) {
+    public ResponseEntity<Map<String, Object>> createOrder(@RequestBody OrderRequest request, @MemberInfo MemberInfoDto memberInfoDto) {
         System.out.println("Received order: " + request);
 
         // 요청 데이터 확인
@@ -32,13 +43,28 @@ public class OrderController {
             }
         }
 
-        // OrderRequest를 Order 엔티티로 변환
+        // OrderRequest를 OrderPayment 엔티티로 변환
         OrderPayment orderPayment = new OrderPayment();
-        orderPayment.setItems(request.getItems()); // Order에 OrderItem 목록 설정
-        // 추가적으로 필요한 필드가 있으면 설정 (예: totalAmount, userId 등)
+        orderPayment.setItems(request.getItems());  // Order에 OrderItem 목록 설정
 
-        // Order 저장
-        OrderPayment savedOrderPayment = orderService.saveOrder(orderPayment);
+        // totalAmount를 프론트에서 받은 값으로 설정
+        orderPayment.setTotalAmount(request.getTotalAmount());
+
+        // memberId를 Member 객체로 변환하여 설정
+        Member member = memberRepository.findById(memberInfoDto.getMemberId())
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        orderPayment.setMember(member);  // OrderPayment에 Member 설정
+
+        // Order 저장 (OrderRepository 사용)
+        OrderPayment savedOrderPayment = orderPaymentRepository.save(orderPayment);
+
+        // OrderItem의 orderPayment 설정
+        for (OrderItem item : savedOrderPayment.getItems()) {
+            item.setOrderPayment(savedOrderPayment);  // OrderPayment 연결
+        }
+
+        // OrderItem 저장
+        orderItemRepository.saveAll(savedOrderPayment.getItems());  // OrderItem을 개별적으로 저장
 
         Map<String, Object> response = new HashMap<>();
         response.put("orderId", savedOrderPayment.getId());  // 저장된 주문의 ID 반환
@@ -46,5 +72,35 @@ public class OrderController {
 
         return ResponseEntity.ok(response);
     }
-}
 
+    @GetMapping("/order-list")
+    public ResponseEntity<Map<String, Object>> getMyOrders(@MemberInfo MemberInfoDto memberInfoDto) {
+        // 현재 로그인한 사용자 정보 가져오기
+        Member member = memberRepository.findById(memberInfoDto.getMemberId())
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        // 사용자의 주문 목록 조회
+        List<OrderPayment> orders = orderPaymentRepository.findByMember(member);
+
+        // 응답 데이터 생성
+        List<Map<String, Object>> orderList = new ArrayList<>();
+        for (OrderPayment order : orders) {
+            Map<String, Object> orderData = new HashMap<>();
+            orderData.put("orderId", order.getId());
+            orderData.put("totalAmount", order.getTotalAmount());
+            orderData.put("items", order.getItems().stream().map(item -> {
+                Map<String, Object> itemData = new HashMap<>();
+                itemData.put("name", item.getName());
+                itemData.put("price", item.getPrice());
+                itemData.put("count", item.getCount());
+                return itemData;
+            }).toList());
+            orderList.add(orderData);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("orders", orderList);
+        return ResponseEntity.ok(response);
+    }
+
+}

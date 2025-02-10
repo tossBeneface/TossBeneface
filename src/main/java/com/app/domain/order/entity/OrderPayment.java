@@ -16,13 +16,15 @@ public class OrderPayment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orderPayment", cascade = CascadeType.ALL)
     private List<OrderItem> items;
+
+    private Integer totalAmount;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
-    @ManyToOne
-    @JoinColumn(name = "card_id")
-    private Card card;
+
+    private String cardReason;
 }
+

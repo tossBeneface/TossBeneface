@@ -6,17 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor  // 생성자 주입을 자동으로 생성
 public class OrderService {
 
-    private OrderRepository orderRepository;
-    // 생성자 주입
-    public OrderService(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
+    private final OrderRepository orderRepository;  // OrderRepository가 자동으로 주입됩니다.
 
-    public OrderPayment saveOrder(OrderPayment orderPayment) {
-        return orderRepository.save(orderPayment); // 주문을 데이터베이스에 저장
+    public OrderPayment saveOrder(OrderPayment order) {
+        orderRepository.save(order);
+        return order;
     }
 }
 

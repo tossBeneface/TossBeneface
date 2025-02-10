@@ -68,10 +68,8 @@ public class SecurityConfig {
                         .requestMatchers( "/swagger-ui/**", /* Swagger UI*/"/v3/api-docs/**", /*OpenAPI 문서*/// 인증 없이 접근 허용
                                 "/api/health","/api/join", "/api/login", "/api/access-token/issue", "/h2-console/**",
                                 "/api/qnaboard/**", "/api/member/info", "/api/card-benefits", "/api/flow","/api/payments/**", "/payment/**", "/success/**", "http://localhost:8080/api/v1/payments/toss/fail/**", "http://localhost:8080/api/v1/payments/toss/success/**", "/api/payment/**", "/fail/**", "https://api.tosspayments.com/v1/payments/confirm/**",
-                                "/api/user-data-test/**", "/api/faces/**", "/api/card-benefits/**","/api/products/**", "/api/member/name/**", "/api/qr/generate", "/api/qr/authenticate", "/api/user-cards/**", "/api/orders").permitAll() // 인증 없이 접근 허용
-
-//                                "/api/user-data-test/**", "/api/faces/**", "/api/card-benefits/**","/api/products/**", "/api/qr/**", "/qr/authenticate","/api/member/name/**").permitAll() // 인증 없이 접근 허용
-
+                                "/api/user-data-test/**", "/api/faces/**", "/api/card-benefits/**","/api/products/**", "/api/qr/generate", "/api/qr/authenticate", "/api/orders/**",
+                                "/api/user-cards/**").permitAll() // 인증 없이 접근 허용
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 )
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())
@@ -114,7 +112,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("*")); // 모든 도메인을 허용, 필요 시 특정 도메인만 허용
+        config.setAllowedOriginPatterns(List.of(
+                "http://localhost:3000", "http://localhost:3001",
+                "https://app.tossbeneface.com",
+                "https://www.tossbeneface.com"
+        ));  // 모든 도메인을 허용, 필요 시 특정 도메인만 허용
         config.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")); // 허용할 HTTP 메서드
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept")); // 허용할 헤더
         config.setAllowCredentials(true); // 인증 정보 포함 허용
@@ -123,5 +125,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 
 }

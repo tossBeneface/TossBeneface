@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "authentication", description = "로그인/로그아웃/토큰재발급 API")
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS })
+@CrossOrigin(origins = {"http://localhost:3001", "http://localhost:3000"}, allowedHeaders = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS })
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @Slf4j
