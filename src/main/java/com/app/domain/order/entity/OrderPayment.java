@@ -3,14 +3,21 @@ package com.app.domain.order.entity;
 import com.app.domain.card.entity.Card;
 import com.app.domain.member.entity.Member;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-public class Order {
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+public class OrderPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String orderMenu;
-    private Integer price;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderItem> items;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -18,6 +25,4 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "card_id")
     private Card card;
-
-
 }
