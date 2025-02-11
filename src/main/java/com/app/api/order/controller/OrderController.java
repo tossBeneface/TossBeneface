@@ -87,6 +87,7 @@ public class OrderController {
         // 현재 로그인한 사용자 정보 가져오기
         Member member = memberRepository.findById(memberInfoDto.getMemberId())
                 .orElseThrow(() -> new RuntimeException("Member not found"));
+        System.out.println("memberId :" + String.valueOf(memberInfoDto.getMemberId()));
 
         // 사용자의 주문 목록 조회
         List<OrderPayment> orders = orderPaymentRepository.findByMember(member);
