@@ -33,4 +33,11 @@ public class UserCardController {
             @MemberInfo MemberInfoDto memberInfoDto) {
         return ResponseEntity.ok(userCardService.registerCard(dto, memberInfoDto.getMemberId()));
     }
+    @DeleteMapping("/{cardId}")
+    public ResponseEntity<String> deleteUserCard(
+            @PathVariable Long cardId,
+            @MemberInfo MemberInfoDto memberInfoDto) {
+        userCardService.deleteUserCard(cardId, memberInfoDto.getMemberId());
+        return ResponseEntity.ok("카드 삭제 완료");
+    }
 }
