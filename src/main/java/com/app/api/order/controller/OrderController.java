@@ -22,8 +22,8 @@ import java.util.Map;
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 public class OrderController {
 
-    private final OrderRepository orderPaymentRepository;  // OrderRepository를 주입받음
-    private final MemberRepository memberRepository;  // MemberRepository 주입
+    private final OrderRepository orderPaymentRepository;
+    private final MemberRepository memberRepository;
     private final OrderItemRepository orderItemRepository;
 
     public OrderController(OrderRepository orderPaymentRepository, MemberRepository memberRepository, OrderItemRepository orderItemRepository) {
@@ -33,7 +33,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createOrder(@RequestBody OrderRequest request, @MemberInfo MemberInfoDto memberInfoDto) {
+    public ResponseEntity<Map<String, Object>> createOrder(@RequestBody OrderRequest request) {
         System.out.println("Received order: " + request);
 
         // 요청 데이터 확인
@@ -43,40 +43,37 @@ public class OrderController {
             }
         }
 
+        // memberId를 OrderRequest에서 직접 받음
+        Long memberId = request.getMemberId();
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
         // OrderRequest를 OrderPayment 엔티티로 변환
         OrderPayment orderPayment = new OrderPayment();
-        orderPayment.setItems(request.getItems());  // Order에 OrderItem 목록 설정
-
-        // totalAmount를 프론트에서 받은 값으로 설정
+        orderPayment.setItems(request.getItems());  // OrderPayment에 주문 항목 설정
         orderPayment.setTotalAmount(request.getTotalAmount());
+        orderPayment.setMember(member);  // 클라이언트로부터 받은 memberId를 통해 조회한 Member 객체 설정
 
-        // memberId를 Member 객체로 변환하여 설정
-        Member member = memberRepository.findById(memberInfoDto.getMemberId())
-                .orElseThrow(() -> new RuntimeException("Member not found"));
-        orderPayment.setMember(member);  // OrderPayment에 Member 설정
-
-        // Order 저장 (OrderRepository 사용)
+        // 주문 저장
         OrderPayment savedOrderPayment = orderPaymentRepository.save(orderPayment);
 
-        // OrderItem의 orderPayment 설정
+        // OrderItem에 OrderPayment 연결 후 저장
         for (OrderItem item : savedOrderPayment.getItems()) {
-            item.setOrderPayment(savedOrderPayment);  // OrderPayment 연결
+            item.setOrderPayment(savedOrderPayment);
         }
+        orderItemRepository.saveAll(savedOrderPayment.getItems());
 
-        // OrderItem 저장
-        orderItemRepository.saveAll(savedOrderPayment.getItems());  // OrderItem을 개별적으로 저장
-
-        // member의 budget을 totalAmount만큼 차감
+        // 회원의 예산 차감 처리
         if (Integer.parseInt(member.getBudget()) >= orderPayment.getTotalAmount()) {
-            member.setBudget(String.valueOf(Integer.parseInt(member.getBudget()) - orderPayment.getTotalAmount()));  // budget 차감
+            member.setBudget(String.valueOf(Integer.parseInt(member.getBudget()) - orderPayment.getTotalAmount()));
             System.out.println("빠지는 가격: " + orderPayment.getTotalAmount());
-            memberRepository.save(member);  // 변경된 member 정보 저장
+            memberRepository.save(member);
         } else {
             return ResponseEntity.status(400).body(Map.of("message", "예산이 부족합니다."));
         }
 
         Map<String, Object> response = new HashMap<>();
-        response.put("orderId", savedOrderPayment.getId());  // 저장된 주문의 ID 반환
+        response.put("orderId", savedOrderPayment.getId());
         response.put("message", "주문이 성공적으로 접수되었습니다.");
 
         return ResponseEntity.ok(response);
