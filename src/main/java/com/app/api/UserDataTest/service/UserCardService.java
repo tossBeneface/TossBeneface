@@ -44,6 +44,7 @@ public class UserCardService {
             throw new IllegalArgumentException("존재하지 않는 회원입니다. memberId: " + memberId);
         }
 
+
         // 3. 랜덤 값 생성 (실적, 혜택 등)
         Random random = new Random();
         int nowPer = random.nextInt(90001) * 10;
@@ -71,4 +72,16 @@ public class UserCardService {
         repository.save(userDataTest);
         return "카드 정보 저장 성공";
     }
+
+    @Transactional
+    public void deleteUserCard(Long cardId, Long memberId) {
+        Optional<UserDataTestEntity> userCardOptional = repository.findCardByIdAndMemberId(cardId, memberId);
+
+        if (userCardOptional.isEmpty()) {
+            throw new IllegalArgumentException("삭제할 카드가 없거나 권한이 없습니다.");
+        }
+
+        repository.deleteCardByIdAndMemberId(cardId, memberId);
+    }
+
 }
