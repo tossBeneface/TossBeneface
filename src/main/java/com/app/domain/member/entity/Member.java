@@ -45,8 +45,9 @@ public class Member extends BaseEntity {
     @Column(nullable = true, length = 200)
     private String profileImg;
 
-    @Column(nullable = true, length = 200)
-    private String budget;
+//    @Column(nullable = true, length = 200)
+    @Column(nullable = true, columnDefinition = "INT DEFAULT 1000000")
+    private Integer budget = 10000000;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
@@ -72,14 +73,14 @@ public class Member extends BaseEntity {
     // 필요한 필드들만 빌더로 받아서 사용할 수 있게
     @Builder
     public Member(String email, String password, String memberName, String phoneNumber, Gender gender,
-        String profileImg, String budget, Role role, MemberStatus memberStatus) {
+        String profileImg, Integer budget, Role role, MemberStatus memberStatus) {
 
         this.email = email;
         this.password = password;
         this.memberName = memberName;
         this.phoneNumber = phoneNumber;
         this.profileImg = profileImg;
-        this.budget = budget;
+        this.budget = (budget != null) ? budget : 10000000;
         this.role = role;
         this.gender = gender;
         this.memberStatus = memberStatus;

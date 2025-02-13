@@ -29,7 +29,7 @@ public class MemberInfoResponseDto {
     private String gender;
 
     @Schema(description = "잔액", example = "10000원", required = true)
-    private String budget;
+    private Integer budget;
 
     @Schema(description = "프로필 사진", example = "없을시 기본 이미지로 대체", required = false)
     private String profileImg;

@@ -50,16 +50,16 @@ public class PaymentService {
         paymentRepository.save(payment);
 
         // 5. MEMBER의 Budget 차감 (기본값 "0" 처리)
-        String budgetStr = Optional.ofNullable(member.getBudget())
-                .filter(b -> !b.trim().isEmpty()) // 빈 문자열 필터링
-                .orElse("0");
+        Integer budget = Optional.ofNullable(member.getBudget())
+                .orElse(0); // null이면 기본값 0 할당
 
-        Integer newBudget = Integer.parseInt(budgetStr) - payment.getTotalAmount();
+
+        Integer newBudget = budget - payment.getTotalAmount();
 
         if (newBudget < 0) {
             throw new RuntimeException("Insufficient funds");
         }
-        member.setBudget(String.valueOf(newBudget));
+        member.setBudget(newBudget);
 
         // 6. MEMBER 정보 업데이트
         memberRepository.save(member);

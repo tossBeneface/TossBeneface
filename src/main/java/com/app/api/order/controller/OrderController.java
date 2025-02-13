@@ -67,8 +67,8 @@ public class OrderController {
         orderItemRepository.saveAll(savedOrderPayment.getItems());  // OrderItem을 개별적으로 저장
 
         // member의 budget을 totalAmount만큼 차감
-        if (Integer.parseInt(member.getBudget()) >= orderPayment.getTotalAmount()) {
-            member.setBudget(String.valueOf(Integer.parseInt(member.getBudget()) - orderPayment.getTotalAmount()));  // budget 차감
+        if (member.getBudget() >= orderPayment.getTotalAmount()) {
+            member.setBudget(member.getBudget() - orderPayment.getTotalAmount());  // budget 차감
             System.out.println("빠지는 가격: " + orderPayment.getTotalAmount());
             memberRepository.save(member);  // 변경된 member 정보 저장
         } else {

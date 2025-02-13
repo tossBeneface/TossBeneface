@@ -50,7 +50,6 @@ public class LoginService {
                 .memberStatus(MemberStatus.ACTIVATE)
                 //TODO 기본이미지 처리 -> 프론트에 넘겨서?
                 .profileImg(Optional.ofNullable(request.getProfileImg()).orElse(""))
-                .budget(Optional.ofNullable(request.getProfileImg()).orElse(""))
                 .build();
 
         member = memberService.registerMember(member);
@@ -75,9 +74,6 @@ public class LoginService {
             response.setEmail(member.getEmail());
             response.setMemberName(member.getMemberName());
             response.setPhoneNumber(member.getPhoneNumber());
-            if (!member.getBudget().isEmpty()) {
-                response.setBudget(member.getBudget());
-            }
             if (!member.getProfileImg().isEmpty()) {
                 response.setProfileImg(member.getProfileImg());
             }
