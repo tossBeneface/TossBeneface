@@ -119,7 +119,7 @@ public class SecurityConfig {
                 "http://127.0.0.1:3000",
                 "https://app.tossbeneface.com",
                 "https://www.tossbeneface.com",
-                "https://d2c33voyig3fqp.cloudfront.net/"
+                "https://d2c33voyig3fqp.cloudfront.net"
         ));  // 모든 도메인을 허용, 필요 시 특정 도메인만 허용
         config.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")); // 허용할 HTTP 메서드
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept")); // 허용할 헤더
