@@ -116,12 +116,15 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:3000",
+                "http://127.0.0.1:3000",
                 "https://app.tossbeneface.com",
-                "https://www.tossbeneface.com"
+                "https://www.tossbeneface.com",
+                "https://d2c33voyig3fqp.cloudfront.net/"
         ));  // 모든 도메인을 허용, 필요 시 특정 도메인만 허용
         config.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")); // 허용할 HTTP 메서드
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept")); // 허용할 헤더
         config.setAllowCredentials(true); // 인증 정보 포함 허용
+        config.setExposedHeaders(List.of("Set-Cookie")); // 쿠키가 응답 헤더에서 클라이언트에게 전달될 수 있도록 설정
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
