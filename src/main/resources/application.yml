@@ -68,7 +68,7 @@ cloud:
 # 토스 결제 연동
 payment:
   toss:
-    test_client_api_key: test_ck_DpexMgkW36ya40vyX0l48GbR5ozO
-    test_secret_api_key: test_sk_GePWvyJnrKQdQ5Ey5OQ63gLzN97E
-    success_url : "http://localhost:8080/api/v1/payments/toss/success"
-    fail_url : "http://localhost:8080/api/v1/payments/toss/fail"
+    test_client_api_key: ENC(yeaC8UHVav1+T5KQ93OpV5ZeWkVI1rp1cXpKlNSWO6PoAFuahzdhLi+wqOtcJf3q)
+    test_secret_api_key: ENC(crf2H4QdLrkL4FKQj7UISoxqZKcj+D/vs8Ny2sEWtGADiB/HyNYvB3uZREqa3kh+)
+    success_url : "https://api.tossbeneface.com/api/v1/payments/toss/success"
+    fail_url : "https://api.tossbeneface.com/api/v1/payments/toss/fail"
