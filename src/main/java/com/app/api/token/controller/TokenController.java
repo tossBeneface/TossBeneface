@@ -4,7 +4,7 @@ import com.app.api.token.dto.AccessTokenResponseDto;
 import com.app.api.token.service.TokenService;
 import com.app.global.error.ErrorCode;
 import com.app.global.error.exception.AuthenticationException;
-import com.app.global.jwt.service.CookieService;
+import com.app.global.util.CookieEncryptionUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
@@ -27,12 +27,11 @@ import java.util.Arrays;
 public class TokenController {
 
     private final TokenService tokenService;
-    private final CookieService cookieService;
 
     @Tag(name = "authentication")
     @Operation(summary = "Access Token 재발급 API", description = "Access Token 재발급 API")
     @PostMapping("/access-token/issue")
-    public ResponseEntity<AccessTokenResponseDto> createAccessToken(HttpServletRequest httpServletRequest, HttpServletResponse response) {
+    public ResponseEntity<AccessTokenResponseDto> createAccessToken(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
         // 쿠키에서 RefreshToken 추출
         Cookie[] cookies = httpServletRequest.getCookies();
         if (cookies == null) {
@@ -40,18 +39,22 @@ public class TokenController {
             throw new AuthenticationException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
         }
 
-        for (Cookie cookie : cookies) {
-            log.info("Cookie Name: {}, Cookie Value: {}", cookie.getName(), cookie.getValue());
-        }
-
-        String refreshToken = Arrays.stream(cookies)
+        String encryptedRefreshToken = Arrays.stream(cookies)
                 .filter(cookie -> "refreshToken".equals(cookie.getName()))
                 .map(Cookie::getValue)
                 .findFirst()
                 .orElseThrow(() -> new AuthenticationException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
 
+        // 복호화 처리
+        String refreshToken;
+        try {
+            refreshToken = CookieEncryptionUtils.decrypt(encryptedRefreshToken);
+        } catch (Exception e) {
+            log.error("Failed to decrypt refresh token", e);
+            throw new AuthenticationException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
+        }
 
-        // RefreshToken을 사용해 AccessToken 생성
+        // 복호화된 refresh token을 사용해 AccessToken 생성
         AccessTokenResponseDto accessTokenResponseDto = tokenService.createAccessTokenByRefreshToken(refreshToken, response);
 
         return ResponseEntity.ok(accessTokenResponseDto);

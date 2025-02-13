@@ -3,7 +3,6 @@ package com.app.api.login.controller;
 import com.app.api.login.dto.JoinDto;
 import com.app.api.login.dto.LoginDto;
 import com.app.api.login.service.LoginService;
-import com.app.global.jwt.service.CookieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
 
     private final LoginService loginService;
-    private final CookieService cookieService;
 
     @Tag(name = "authentication")
     @Operation(summary = "회원가입 API", description = "회원가입 API")

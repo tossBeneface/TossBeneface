@@ -23,7 +23,7 @@ public class TokenService {
     private final CookieService cookieService;
     private final JwtUtils jwtUtils;
 
-    public AccessTokenResponseDto createAccessTokenByRefreshToken(String refreshToken, HttpServletResponse response) {
+    public AccessTokenResponseDto createAccessTokenByRefreshToken(String refreshToken, HttpServletResponse response) throws Exception {
 
         Member member = memberService.findMemberByRefreshToken(refreshToken);
         jwtUtils.validateToken(refreshToken);

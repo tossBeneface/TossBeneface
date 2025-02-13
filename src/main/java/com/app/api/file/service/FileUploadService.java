@@ -26,6 +26,9 @@ public class FileUploadService {
     private final AttachmentRepository attachmentRepository;
 
     public String uploadFile(MultipartFile file) {
+        // FileUtils를 이용해 파일 확장자 검증 수행
+        FileUtils.validateFileExtension(file);
+
         String fileName = generateUniqueFileName(file.getOriginalFilename());
 
         try {
