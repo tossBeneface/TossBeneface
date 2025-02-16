@@ -9,7 +9,7 @@ import java.util.List;
 public class FileUtils {
 
     // 업로드 시 허용할 파일 확장자 목록 (필요에 따라 수정)
-    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "pdf");
+    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "pdf", "gif", "txt");
 
     private FileUtils() {
         // 유틸리티 클래스는 인스턴스화 방지
