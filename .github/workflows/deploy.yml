@@ -28,31 +28,29 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build --build-arg PASSWORD=${{ secrets.PASSWORD }} -t ${{ secrets.DOCKER_USERNAME }}/toss-beneface:latest .
+          docker build --build-arg PASSWORD=${{ secrets.PASSWORD }} \
+            -t ${{ secrets.DOCKER_USERNAME }}/toss-beneface:latest .
 
       - name: Push Docker image to Docker Hub
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           docker push ${{ secrets.DOCKER_USERNAME }}/toss-beneface:latest
 
-      - name: Deploy to EC2
-        if: always()
-        env:
-          PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+      - name: Restore key.pem
         run: |
           echo "${{ secrets.EC2_PRIVATE_KEY }}" | base64 -d > key.pem
           chmod 400 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-            cat > .env << 'EOL'
-            DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
-            DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
-            EC2_HOST=${{ secrets.EC2_HOST }}
-            EC2_PRIVATE_KEY=${{ secrets.EC2_PRIVATE_KEY }}
-            PASSWORD=${{ secrets.PASSWORD }}
-            EOL
-            
-            docker pull ${{ secrets.DOCKER_USERNAME }}/toss-beneface:latest
-            docker stop toss-beneface || true
-            docker rm toss-beneface || true
-            docker run -d --name toss-beneface -p 8080:8080 --env-file .env ${{ secrets.DOCKER_USERNAME }}/toss-beneface:latest
+
+      - name: Copy .env to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no -i key.pem .env ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
+
+      - name: Deploy to EC2
+        if: always()
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} <<'EOF'
+          docker pull ${{ secrets.DOCKER_USERNAME }}/toss-beneface:latest
+          docker stop toss-beneface || true
+          docker rm toss-beneface || true
+          docker run -d --name toss-beneface -p 8080:8080 --env-file /home/ubuntu/.env ${{ secrets.DOCKER_USERNAME }}/toss-beneface:latest
           EOF
