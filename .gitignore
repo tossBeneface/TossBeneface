@@ -9,6 +9,7 @@ build/
 src/main/generated
 /gradlew.bat
 .env
+.http
 
 ### STS ###
 .apt_generated
