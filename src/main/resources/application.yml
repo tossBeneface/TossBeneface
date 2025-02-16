@@ -53,7 +53,6 @@ token:
   access-token-expiration-time: 900000 # 15분 1000(ms) x 60(s) x 15(m)
   refresh-token-expiration-time: 1209600000 # 2주 1000(ms) x 60 (s) x 60(m) x 24(h) x 14(d)
 
-# 암호화해서 가져가고 싶은 내용 넣기
 jasypt:
   password: ${PASSWORD}
 
