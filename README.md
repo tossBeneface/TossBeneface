@@ -1,55 +1,8 @@
 # TossBeneface
 
-인텔리제이 실행시 vm option으로
-
-1) prod 환경으로 실행 원할 경우
-```Bash
--Djasypt.password=sakncksjallkasdkl#$@^#*asdsiajodias2737
-```
-
-2) local 환경으로 실행 원할 경우
-```Bash
--Djasypt.password=sakncksjallkasdkl#$@^#*asdsiajodias2737 -Dspring.profiles.active=local
-```
-
-추가해야 동작함
-
-(*jasypt : api key등 양방향 암호화 해주는 라이브러리)
+프로젝트 가이드
 
 
+https://ai-03-10.atlassian.net/wiki/spaces/~6018ffdf3b1af00069d10b48/pages/590228/Secure+coding 
 
-### 회원가입 요청
-```
-POST http://localhost:8080/api/join
-Content-Type: application/json
-
-{
-  "email": "test@example.com",
-  "password": "password123",
-  "memberName": "Test User",
-  "phoneNumber": "010-000-0000",
-  "role": "USER",
-  "gender": "FEMALE"
-}
-```
-
-###
-### 로그인 요청
-```
-POST http://localhost:8080/api/login
-Content-Type: application/json
-
-{
-  "email": "test@example.com",
-  "password": "password123"
-}
-```
-###
-### mysql db 설정
-```
-CREATE DATABASE toss_beneface;
-CREATE USER 'toss_beneface_user'@'localhost' IDENTIFIED BY 'ai0310';
-CREATE USER 'toss_beneface_user'@'%' IDENTIFIED BY 'ai0310';
-GRANT ALL PRIVILEGES ON toss_beneface.* TO 'toss_beneface_user'@'localhost';
-GRANT ALL PRIVILEGES ON toss_beneface.* TO 'toss_beneface_user'@'%';
-```
+에서 참고(ai-03-10 멤버용)
