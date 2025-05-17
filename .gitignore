@@ -41,3 +41,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# local-only Jasypt 테스트 (암호화 키 포함)
+/src/test/java/com/app/util/JasyptTest.java

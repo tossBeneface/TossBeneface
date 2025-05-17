@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/toss_beneface
     username: toss_beneface_user
-    password: ai0310
+    password: ENC(P6l75mrvfGXaUNcDTnFw9g==)
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
